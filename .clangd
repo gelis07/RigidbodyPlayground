@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: 
+    - -std=c++17
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: None
+InlayHints:
+  ParameterNames: false
+  DeducedTypes: false
+  Designators: false
