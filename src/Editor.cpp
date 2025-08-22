@@ -52,7 +52,7 @@ void Editor::Hierachy()
             ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.0f, 0.0f, 1.0f)));
             ChangedColor = true;
         }
-        if(ImGui::Button(std::to_string(i).c_str()))
+        if(ImGui::Button(("Entity " + std::to_string(i)).c_str()))
         {
             SelectedEntity = i;
         }

@@ -82,7 +82,10 @@ namespace Utilities
 
         return glm::vec3(model * glm::vec4(point,1.0f));
     }
-
+    inline bool AlmostEqual(float a, float b)
+    {
+        return glm::abs(a-b) < 0.00001f;
+    }
 
     inline void print(const glm::vec3& vec)
     {

@@ -9,7 +9,9 @@ cRigidBody::cRigidBody(Entity* entity) : Component(entity)
     mTransform = GetMasterEntity()->GetTransformPointer();
 
     InspectorVariables.push_back({"velocity", VEC3, glm::value_ptr(velocity)});
+    InspectorVariables.push_back({"Angular Velocity", VEC3, glm::value_ptr(AngVelocity)});
     InspectorVariables.push_back({"mass", FLOAT, reinterpret_cast<void*>(&mMass)});
+    InspectorVariables.push_back({"InvInertia", FLOAT, reinterpret_cast<void*>(&InvInertiaCenter)});
     InspectorVariables.push_back({"static", BOOL, reinterpret_cast<void*>(&mStatic)});
     name = "Rigidbody";
 }
@@ -169,8 +171,6 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
         obj->mTransform->position += -displacement * 0.5f;
     }
 
-    
-
     //Getting the collision points uing the clipping method 
     // https://dyn4j.org/2011/11/contact-points-using-clipping/
     verticesA = GetWorldCoordinates();
@@ -195,6 +195,9 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
     glm::vec3 refv = glm::normalize(ref.edge());
     float o1 =glm::dot(refv,ref.v1);
     std::vector<glm::vec3> cp1 = Clip(inc.v1, inc.v2, refv, o1);
+
+
+
 
 
     if(cp1.size() < 2)

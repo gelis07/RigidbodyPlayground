@@ -9,8 +9,8 @@ inline std::vector<float> vertices =
 {
     -0.5f,  0.5f, 0.0f,
     -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f,  0.5f, 0.0f 
+     0.5f, -0.5f, 0.0f,
+     0.5f,  0.5f, 0.0f 
 };
 inline std::vector<glm::vec3> SquareVertices = 
 {
