@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include "App.h"
 #define PHYSICS_TIMESTEP 0.02f
-#define PHYSICS_ITERATIONS 1.0f
+#define PHYSICS_ITERATIONS 10.0f
 void Engine::Init()
 {
     mRenderEngine.Init();
@@ -35,9 +35,9 @@ void Engine::Run(Scene* scene, float time)
         accumalator += deltaTime;
         while (accumalator >= 0.02f)
         {
+            mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
             for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
             {
-                mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
             }
             accumalator -= 0.02f;
         }

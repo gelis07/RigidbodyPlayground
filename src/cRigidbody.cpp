@@ -151,12 +151,13 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
         }
     }
     glm::vec3 normal = glm::normalize(smallestAxis);
-    if(glm::dot(obj->GetTransform().position - GetTransform().position, normal) < 0)
-        normal *= -1.0f;
-
-
     glm::vec3 displacement = -normal * MinOverlap;
-
+    bool flipObj = false;
+    if(glm::dot(obj->GetTransform().position - GetTransform().position, normal) < 0)
+    {
+        displacement *= -1.0f;
+        flipObj = true;
+    }
 
     if(obj->GetStatic())
     {
@@ -173,8 +174,15 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
 
     //Getting the collision points uing the clipping method 
     // https://dyn4j.org/2011/11/contact-points-using-clipping/
-    verticesA = GetWorldCoordinates();
-    verticesB = obj->GetWorldCoordinates();
+    if(!flipObj)
+    {
+        verticesA = GetWorldCoordinates();
+        verticesB = obj->GetWorldCoordinates();
+    }else
+    {
+        verticesA = obj->GetWorldCoordinates();
+        verticesB = GetWorldCoordinates();
+    }
     Edge e1 = Best(normal, verticesA);
     Edge e2 = Best(-normal, verticesB);
     
@@ -195,9 +203,6 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
     glm::vec3 refv = glm::normalize(ref.edge());
     float o1 =glm::dot(refv,ref.v1);
     std::vector<glm::vec3> cp1 = Clip(inc.v1, inc.v2, refv, o1);
-
-
-
 
 
     if(cp1.size() < 2)
