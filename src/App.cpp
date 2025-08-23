@@ -54,7 +54,7 @@ void App::Update()
         mEditor.Update();
             
         glBindFramebuffer(GL_FRAMEBUFFER, mEditor.fbo);
-        mEngine.Run(&mEditor.scene, glfwGetTime());
+        mEngine.Run(&mEditor.scene, mEditor.paused , glfwGetTime());
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         ImGui::Render();

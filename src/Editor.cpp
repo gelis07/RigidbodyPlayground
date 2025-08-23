@@ -4,9 +4,23 @@ void Editor::Update()
 {
     Dockspace();
     ImGui::Begin("Viewport");
-
     const float windowWidth = ImGui::GetContentRegionAvail().x;
     const float windowHeight = ImGui::GetContentRegionAvail().y;
+    if(paused)
+    {   
+        ImGui::SetCursorPosX(windowWidth/2.0f);
+        if(ImGui::Button(">"))
+        {
+            paused = !paused;
+        }
+    }else
+    {
+        ImGui::SetCursorPosX(windowWidth/2.0f);
+        if(ImGui::Button("||"))
+        {
+            paused = !paused;
+        }
+    }
 
     RescaleFramebuffer(windowWidth, windowHeight);
     glViewport(0,0,windowWidth, windowHeight);
@@ -90,22 +104,22 @@ void Editor::RenderVariable(InspectorVarData& data)
         }
         case FLOAT:
         {
-            ImGui::DragFloat(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed);
+            ImGui::DragFloat(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
             break;
         }
         case VEC2:
         {
-            ImGui::DragFloat2(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed);
+            ImGui::DragFloat2(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
             break;
         }
         case VEC3:
         {
-            ImGui::DragFloat3(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed);
+            ImGui::DragFloat3(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
             break;
         }
         case VEC4:
         {
-            ImGui::DragFloat4(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed);
+            ImGui::DragFloat4(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
             break;
         }
     }

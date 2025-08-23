@@ -30,11 +30,15 @@ class cRigidBody : public Component
     public:
         cRigidBody(Entity* entity);
         void SetVertices(const std::vector<glm::vec3>& aVertices);
-        CollisionData CheckCollisions(cRigidBody* obj);
         Edge Best(glm::vec3 normal, const std::vector<glm::vec3>& vertices);
         std::vector<glm::vec3> Clip(glm::vec3 v1, glm::vec3 v2, glm::vec3 n, float o);
         void Update(float deltaTime);
         void Init();
+        
+        
+        CollisionData CheckCollisionsGJK(cRigidBody* obj);
+        CollisionData CheckCollisionsSAT(cRigidBody* obj);
+        std::vector<glm::vec3> GetCollisionPoints(const std::vector<glm::vec3>& verticesA, const std::vector<glm::vec3>& verticesB, glm::vec3 normal);
 
 
         Transform GetTransform() {return *mTransform;}
@@ -50,7 +54,8 @@ class cRigidBody : public Component
 
         void CalculateMassIner();
 
-
+        float GetSf() {return StaticFriction;}
+        float GetDf() {return DynamicFriction;}
     private:
         bool AlmostEqual(float a, float b);
 
@@ -62,6 +67,8 @@ class cRigidBody : public Component
         float InvInertiaCenter = 0.0f;
         float mMass = 1.0f;
         float mInvMass = 1.0f;
+        float StaticFriction = 0.1f;
+        float DynamicFriction = 0.2f;
         Transform* mTransform;
         std::vector<glm::vec3> mVertices;
         std::vector<Force> mForces;

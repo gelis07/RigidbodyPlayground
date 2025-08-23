@@ -13,6 +13,8 @@ cRigidBody::cRigidBody(Entity* entity) : Component(entity)
     InspectorVariables.push_back({"mass", FLOAT, reinterpret_cast<void*>(&mMass)});
     InspectorVariables.push_back({"InvInertia", FLOAT, reinterpret_cast<void*>(&InvInertiaCenter)});
     InspectorVariables.push_back({"static", BOOL, reinterpret_cast<void*>(&mStatic)});
+    InspectorVariables.push_back({"static friction", FLOAT, reinterpret_cast<void*>(&StaticFriction), 0.01f, 0.0f, 1.0f});
+    InspectorVariables.push_back({"dynamic friction", FLOAT, reinterpret_cast<void*>(&DynamicFriction), 0.01f, 0.0f, 1.0f});
     name = "Rigidbody";
 }
 
@@ -100,7 +102,7 @@ glm::vec2  ProjectShape(glm::vec3 axis, const std::vector<glm::vec3>& vertices)
     }
     return glm::vec2(min, max);
 }
-CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
+CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
 {
 
     //Basic collision using the SAT 
@@ -183,6 +185,22 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
         verticesA = obj->GetWorldCoordinates();
         verticesB = GetWorldCoordinates();
     }
+    std::vector<glm::vec3> contactPoints = GetCollisionPoints(verticesA, verticesB, normal);
+    if(flipObj)
+        normal *= -1.0f;
+
+    return {true, -normal, MinOverlap, contactPoints};
+}
+
+
+
+CollisionData cRigidBody::CheckCollisionsGJK(cRigidBody* obj)
+{
+    return {};
+}
+
+std::vector<glm::vec3> cRigidBody::GetCollisionPoints(const std::vector<glm::vec3>& verticesA, const std::vector<glm::vec3>& verticesB, glm::vec3 normal)
+{
     Edge e1 = Best(normal, verticesA);
     Edge e2 = Best(-normal, verticesB);
     
@@ -206,12 +224,12 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
 
 
     if(cp1.size() < 2)
-        return {true, displacement, {}};
+        return {};
 
     float o2 = glm::dot(refv, ref.v2);
     std::vector<glm::vec3> cp2 = Clip(cp1[0], cp1[1], -refv, -o2);
     if(cp2.size() < 2)
-        return {true, displacement, {}};
+        return {};
 
 
     if(flip)
@@ -224,10 +242,8 @@ CollisionData cRigidBody::CheckCollisions(cRigidBody* obj)
     if (glm::dot(refNorm, cp2[1]) - max < 0.0f) {
         cp2.erase(cp2.begin() + 1);
     }
-
-    return {true, -normal, MinOverlap, cp2};
+    return cp2;
 }
-
 std::vector<glm::vec3> cRigidBody::Clip(glm::vec3 v1, glm::vec3 v2, glm::vec3 n, float o)
 {
     std::vector<glm::vec3> cp;

@@ -11,6 +11,8 @@ struct InspectorVarData
     VARIABLE_TYPE type;
     void* data;
     float speed = 1.0f; // Speed of the imgui slider
+    float min = -INFINITY;
+    float max = INFINITY;
 };
 
 class Component

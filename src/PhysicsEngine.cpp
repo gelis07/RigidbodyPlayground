@@ -16,7 +16,7 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            CollisionData data = rigidbodies[a]->CheckCollisions(rigidbodies[b]);
+            CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
             {
                 CollisionResolution(rigidbodies[a], rigidbodies[b], data);
@@ -34,6 +34,8 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
     glm::vec3 n = data.normal;
     float e = 0.0f;
     const int iterations = 10;
+    float sf = (A->GetSf() + B->GetSf()) * 0.5f;
+    float df = (A->GetDf() + B->GetDf()) * 0.5f;
     for(int iter = 0; iter < iterations; iter++)
     {
         std::vector<ImpulseData> ImpData;
@@ -78,63 +80,63 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         // }
 
         //*Friction
-        // for (int p = 0; p < data.contactPoints.size(); p++)
-        // {
-        //     glm::vec3 ra = data.contactPoints[p] - A->GetTransform().position;
-        //     glm::vec3 rb = data.contactPoints[p] - B->GetTransform().position;
+        for (int p = 0; p < data.contactPoints.size(); p++)
+        {
+            glm::vec3 ra = data.contactPoints[p] - A->GetTransform().position;
+            glm::vec3 rb = data.contactPoints[p] - B->GetTransform().position;
             
-        //     glm::vec3 rat = glm::vec3(-ra.y, ra.x, 0.0f);
-        //     glm::vec3 rbt = glm::vec3(-rb.y, rb.x, 0.0f);
+            glm::vec3 rat = glm::vec3(-ra.y, ra.x, 0.0f);
+            glm::vec3 rbt = glm::vec3(-rb.y, rb.x, 0.0f);
 
-        //     glm::vec3 angLinVelA = rat * A->AngVelocity.z;
-        //     glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
-        //     glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
+            glm::vec3 angLinVelA = rat * A->AngVelocity.z;
+            glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
+            glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
             
-        //     glm::vec3 tangent = Vp - glm::dot(Vp, n) * n;
-        //     if(Utilities::AlmostEqual(glm::length2(tangent), 0.0f))
-        //     {
-        //         continue;
-        //     }else{
-        //         tangent = glm::normalize(tangent);
-        //     }
-        //     float raPerpDotT = glm::dot(rat, tangent);
-        //     float rbPerpDotT = glm::dot(rbt, tangent);
+            glm::vec3 tangent = Vp - glm::dot(Vp, n) * n;
+            if(Utilities::AlmostEqual(glm::length2(tangent), 0.0f))
+            {
+                continue;
+            }else{
+                tangent = glm::normalize(tangent);
+            }
+            float raPerpDotT = glm::dot(rat, tangent);
+            float rbPerpDotT = glm::dot(rbt, tangent);
 
-        //     float denom = A->GetInvMass() + B->GetInvMass() 
-        //     + (raPerpDotT * raPerpDotT) * A->GetInvInertia()
-        //     + (rbPerpDotT * rbPerpDotT) * B->GetInvInertia();
+            float denom = A->GetInvMass() + B->GetInvMass() 
+            + (raPerpDotT * raPerpDotT) * A->GetInvInertia()
+            + (rbPerpDotT * rbPerpDotT) * B->GetInvInertia();
 
-        //     float ImpulseFriction = 0.0f;
-        //     ImpulseFriction = -glm::dot(Vp, tangent) / (denom * data.contactPoints.size());
-        //     glm::vec3 Friction(0);
-        //     if(glm::abs(ImpulseFriction) <= ImpData[p].j * 0.6f)
-        //     {
-        //         Friction = ImpulseFriction * tangent;
-        //     }else
-        //     {
-        //         Friction = -ImpData[p].j * tangent *0.4f;
-        //     }
+            float ImpulseFriction = 0.0f;
+            ImpulseFriction = -glm::dot(Vp, tangent) / (denom * data.contactPoints.size());
+            glm::vec3 Friction(0);
+            if(glm::abs(ImpulseFriction) <= ImpData[p].j * sf)
+            {
+                Friction = ImpulseFriction * tangent;
+            }else
+            {
+                Friction = -ImpData[p].j * tangent * df;
+            }
             
-        //     FrictionImpulses[p] = Friction;
-        //     //*Gauss-seidel method
-        //     A->velocity += Friction * A->GetInvMass();
-        //     A->AngVelocity += glm::cross(ImpData[p].ra, Friction) * A->GetInvInertia();
+            FrictionImpulses[p] = Friction;
+            //*Gauss-seidel method
+            // A->velocity += Friction * A->GetInvMass();
+            // A->AngVelocity += glm::cross(ImpData[p].ra, Friction) * A->GetInvInertia();
 
-        //     B->velocity += -Friction * B->GetInvMass();
-        //     B->AngVelocity += -glm::cross(ImpData[p].rb, Friction) * B->GetInvInertia();
-        // }
-        // //*Jacobi method
-        // for (int i = 0; i < ImpData.size(); i++)
-        // {
-        //     ImpulseData impulse = ImpData[i];
-        //     glm::vec3 FrictionImpulse = FrictionImpulses[i];
+            // B->velocity += -Friction * B->GetInvMass();
+            // B->AngVelocity += -glm::cross(ImpData[p].rb, Friction) * B->GetInvInertia();
+        }
+        //*Jacobi method
+        for (int i = 0; i < ImpData.size(); i++)
+        {
+            ImpulseData impulse = ImpData[i];
+            glm::vec3 FrictionImpulse = FrictionImpulses[i];
 
-        //     A->velocity += FrictionImpulse * A->GetInvMass();
-        //     A->AngVelocity += glm::cross(impulse.ra, FrictionImpulse) * A->GetInvInertia();
+            A->velocity += FrictionImpulse * A->GetInvMass();
+            A->AngVelocity += glm::cross(impulse.ra, FrictionImpulse) * A->GetInvInertia();
 
-        //     B->velocity += -FrictionImpulse * B->GetInvMass();
-        //     B->AngVelocity += -glm::cross(impulse.rb, FrictionImpulse) * B->GetInvInertia();
-        // }
+            B->velocity += -FrictionImpulse * B->GetInvMass();
+            B->AngVelocity += -glm::cross(impulse.rb, FrictionImpulse) * B->GetInvInertia();
+        }
     }
 
 }

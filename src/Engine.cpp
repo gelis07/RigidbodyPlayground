@@ -17,7 +17,7 @@ bool GetKeyDown(GLFWwindow* window, int key) {
     return isPressed && !wasPressed;
 }
 
-void Engine::Run(Scene* scene, float time)
+void Engine::Run(Scene* scene,bool paused, float time)
 {
 
     mProjection = glm::ortho(0.0f, scene->width, 0.0f, scene->height, -1.0f, 1.0f);
@@ -35,9 +35,9 @@ void Engine::Run(Scene* scene, float time)
         accumalator += deltaTime;
         while (accumalator >= 0.02f)
         {
-            mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
             for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
             {
+                mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
             }
             accumalator -= 0.02f;
         }

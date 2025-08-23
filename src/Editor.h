@@ -35,6 +35,8 @@ class Editor
         void Update();
         GLuint fbo;
         Scene scene;
+        Scene SavedScene;
+        bool paused = true;
     private:
         void Dockspace();
         void RenderVariable(InspectorVarData& data);
