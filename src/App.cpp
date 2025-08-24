@@ -15,6 +15,7 @@ void App::Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+    glfwWindowHint(GLFW_MAXIMIZED, true);
     mWindow = glfwCreateWindow(WIDTH, HEIGHT, "Physics Engine 2.0", NULL, NULL);
     Log(!mWindow, "Couldn't create window or OpenGL Context");
     glfwMakeContextCurrent(mWindow);
@@ -30,12 +31,7 @@ void App::Init()
     ImGui::StyleColorsDark();
     io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
     mEditor.Init();
-
-
 }
-
-
-
 
 
 void App::Update()
@@ -54,7 +50,7 @@ void App::Update()
         mEditor.Update();
             
         glBindFramebuffer(GL_FRAMEBUFFER, mEditor.fbo);
-        mEngine.Run(&mEditor.scene, mEditor.paused , glfwGetTime());
+        mEngine.Run(&mEditor.scene, mEditor.lightPos,mEditor.paused , glfwGetTime());
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         ImGui::Render();

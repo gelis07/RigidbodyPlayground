@@ -27,10 +27,10 @@ void RenderEngine::Init()
     mShaders[NORMAL] = normalShader;
     mShaders[CIRCLE] = CircleShader;
 }
-void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::mat4& aProjection, float time)
+void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::vec3& lightPos, const glm::mat4& aProjection, float time)
 {
     glClearColor(0.5f, 0.2f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (int i = 0; i < renderers.size(); i++) 
     {
@@ -42,12 +42,16 @@ void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::m
         CurrentShader.SetUniform("uColor", obj->color);
         glm::mat4 mvp = aProjection * mCamera.GetView() * obj->GetModel();
         CurrentShader.SetUniform("uMVP", mvp);
+        CurrentShader.SetUniform("LightPos", lightPos);
+        CurrentShader.SetUniform("uModel", obj->GetModel());
+
+
         if(obj->GetRenderType() == CIRCLE)
         {
             CurrentShader.SetUniform("uPos", glm::vec2(obj->GetTransform().position));
         }
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, obj->IndicesCount, GL_UNSIGNED_INT, nullptr);
         glUseProgram(0);
         glBindVertexArray(0);
     }

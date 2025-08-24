@@ -7,7 +7,8 @@ void Engine::Init()
 {
     mRenderEngine.Init();
     mPhysicsEngine.Init();
-    mProjection = glm::ortho(0.0f, WIDTH, 0.0f, HEIGHT, -1.0f, 1.0f);
+    mProjection = glm::ortho(0.0f, WIDTH, 0.0f, HEIGHT, -1000.0f, 1000.0f);
+    glEnable(GL_DEPTH_TEST);
 }
 std::unordered_map<int, bool> prevKeys;
 bool GetKeyDown(GLFWwindow* window, int key) {
@@ -17,10 +18,11 @@ bool GetKeyDown(GLFWwindow* window, int key) {
     return isPressed && !wasPressed;
 }
 
-void Engine::Run(Scene* scene,bool paused, float time)
+void Engine::Run(Scene* scene,const glm::vec3& lightPos,bool paused, float time)
 {
 
-    mProjection = glm::ortho(0.0f, scene->width, 0.0f, scene->height, -1.0f, 1.0f);
+    // mProjection = glm::ortho(0.0f, scene->width, 0.0f, scene->height, -1000.0f, 1000.0f);
+    mProjection = glm::perspective(glm::radians(45.0f), scene->width / scene->height, 0.1f, 1000.0f);
 
     float currentTime = glfwGetTime();
     float deltaTime = currentTime - lastTime;
@@ -49,5 +51,5 @@ void Engine::Run(Scene* scene,bool paused, float time)
     //     Entity& entity = scene->entities[i];
     //     entity.Update();
     // }
-    mRenderEngine.Update(scene->renderers, mProjection, time);
+    mRenderEngine.Update(scene->renderers,lightPos, mProjection, time);
 }

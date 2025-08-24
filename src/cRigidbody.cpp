@@ -161,18 +161,6 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
         flipObj = true;
     }
 
-    if(obj->GetStatic())
-    {
-        mTransform->position += displacement;
-    }
-    else if(GetStatic())
-    {
-        obj->mTransform->position += -displacement;
-    }
-    else{
-        mTransform->position += displacement * 0.5f;
-        obj->mTransform->position += -displacement * 0.5f;
-    }
 
     //Getting the collision points uing the clipping method 
     // https://dyn4j.org/2011/11/contact-points-using-clipping/
@@ -186,6 +174,22 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
         verticesB = GetWorldCoordinates();
     }
     std::vector<glm::vec3> contactPoints = GetCollisionPoints(verticesA, verticesB, normal);
+    if(obj->GetStatic())
+    {
+        mTransform->position += displacement;
+    }
+    else if(GetStatic())
+    {
+        obj->mTransform->position += -displacement;
+    }
+    else{
+        mTransform->position += displacement * 0.5f;
+        obj->mTransform->position += -displacement * 0.5f;
+    }
+    for (glm::vec3& contactPoint : contactPoints) 
+    {
+        contactPoint += displacement;
+    }
     if(flipObj)
         normal *= -1.0f;
 

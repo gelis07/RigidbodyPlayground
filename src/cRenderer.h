@@ -21,7 +21,7 @@ class cRenderer : public Component
         void SetTransform(const Transform& aTrans);
         RENDER_TYPE GetRenderType() {return mRenderType;}
         const glm::mat4& GetModel() {return mModel;}
-
+        int IndicesCount;
         glm::vec4 color = glm::vec4(1.0f);
     private:
         Transform* mTransform;

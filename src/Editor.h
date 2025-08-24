@@ -5,27 +5,7 @@
 #include "Engine.h"
 
 
-inline std::vector<float> vertices = 
-{
-    -0.5f,  0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.5f,  0.5f, 0.0f 
-};
-inline std::vector<glm::vec3> SquareVertices = 
-{
-    glm::vec3(-0.5f,  0.5f, 0.0f),
-    glm::vec3(-0.5f, -0.5f, 0.0f),
-    glm::vec3( 0.5f, -0.5f, 0.0f),
-    glm::vec3( 0.5f,  0.5f, 0.0f) 
-};
 
-
-inline std::vector<int> indices = 
-{
-    0, 1, 3,
-    3, 1, 2
-};
 
 
 class Editor
@@ -36,6 +16,7 @@ class Editor
         GLuint fbo;
         Scene scene;
         Scene SavedScene;
+        glm::vec3 lightPos = glm::vec3(0);
         bool paused = true;
     private:
         void Dockspace();
@@ -45,4 +26,5 @@ class Editor
         GLuint rbo;
         GLuint textureId;
         int SelectedEntity;
+
 };

@@ -33,7 +33,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
     B->CalculateMassIner();
     glm::vec3 n = data.normal;
     float e = 0.0f;
-    const int iterations = 10;
+    const int iterations = 15;
     float sf = (A->GetSf() + B->GetSf()) * 0.5f;
     float df = (A->GetDf() + B->GetDf()) * 0.5f;
     for(int iter = 0; iter < iterations; iter++)
@@ -42,9 +42,9 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         ImpData.resize(data.contactPoints.size());
         std::vector<glm::vec3> FrictionImpulses;
         FrictionImpulses.resize(data.contactPoints.size());
-        // CollisionData data = A->CheckCollisions(B);
         for (int p = 0; p < data.contactPoints.size(); p++)
         {
+            // Utilities::print(data.contactPoints[p]);
             glm::vec3 ra = data.contactPoints[p] - A->GetTransform().position;
             glm::vec3 rb = data.contactPoints[p] - B->GetTransform().position;
             
@@ -79,7 +79,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         //     B->AngVelocity += -glm::cross(impulse.rb, impulse.j * n) * B->GetInvInertia();
         // }
 
-        //*Friction
+        // *Friction
         for (int p = 0; p < data.contactPoints.size(); p++)
         {
             glm::vec3 ra = data.contactPoints[p] - A->GetTransform().position;
@@ -119,24 +119,24 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
             
             FrictionImpulses[p] = Friction;
             //*Gauss-seidel method
-            // A->velocity += Friction * A->GetInvMass();
-            // A->AngVelocity += glm::cross(ImpData[p].ra, Friction) * A->GetInvInertia();
+            A->velocity += Friction * A->GetInvMass();
+            A->AngVelocity += glm::cross(ImpData[p].ra, Friction) * A->GetInvInertia();
 
-            // B->velocity += -Friction * B->GetInvMass();
-            // B->AngVelocity += -glm::cross(ImpData[p].rb, Friction) * B->GetInvInertia();
+            B->velocity += -Friction * B->GetInvMass();
+            B->AngVelocity += -glm::cross(ImpData[p].rb, Friction) * B->GetInvInertia();
         }
         //*Jacobi method
-        for (int i = 0; i < ImpData.size(); i++)
-        {
-            ImpulseData impulse = ImpData[i];
-            glm::vec3 FrictionImpulse = FrictionImpulses[i];
+        // for (int i = 0; i < ImpData.size(); i++)
+        // {
+        //     ImpulseData impulse = ImpData[i];
+        //     glm::vec3 FrictionImpulse = FrictionImpulses[i];
 
-            A->velocity += FrictionImpulse * A->GetInvMass();
-            A->AngVelocity += glm::cross(impulse.ra, FrictionImpulse) * A->GetInvInertia();
+        //     A->velocity += FrictionImpulse * A->GetInvMass();
+        //     A->AngVelocity += glm::cross(impulse.ra, FrictionImpulse) * A->GetInvInertia();
 
-            B->velocity += -FrictionImpulse * B->GetInvMass();
-            B->AngVelocity += -glm::cross(impulse.rb, FrictionImpulse) * B->GetInvInertia();
-        }
+        //     B->velocity += -FrictionImpulse * B->GetInvMass();
+        //     B->AngVelocity += -glm::cross(impulse.rb, FrictionImpulse) * B->GetInvInertia();
+        // }
     }
 
 }
