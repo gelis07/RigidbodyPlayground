@@ -16,8 +16,8 @@ void RenderEngine::Init()
     Shader normalShader;
     Shader CircleShader;
     normalShader
-    .AttachShader(GL_VERTEX_SHADER, "VertexShader.vs")
-    ->AttachShader(GL_FRAGMENT_SHADER, "FragmentShader.fs")
+    .AttachShader(GL_VERTEX_SHADER, "Lighting.vs")
+    ->AttachShader(GL_FRAGMENT_SHADER, "Lighting.fs")
     ->Init();
     CircleShader
     .AttachShader(GL_VERTEX_SHADER, "VertexShader.vs")
