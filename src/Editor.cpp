@@ -53,8 +53,6 @@ void Editor::Update()
             RenderVariable(varData);
         }
     }
-    ImGui::SeparatorText("Light Settings");
-    ImGui::DragFloat3("light pos", glm::value_ptr(lightPos));
     ImGui::End();
 }
 void Editor::Hierachy()
@@ -168,8 +166,8 @@ void Editor::Init()
     obj1.SetTransform({glm::vec3(WIDTH/2.0f, 1000, 0.0f), glm::vec3(0), glm::vec3(100.0f)});
     cRigidBody* objRigid1 = obj1.AddComponent<cRigidBody>();
     cRenderer* objRend1 = obj1.AddComponent<cRenderer>();
-    objRend1->AddVertices(CubeVertices);
-    objRend1->AddIndices(CubeIndices);
+    objRend1->AddVertices(vertices);
+    objRend1->AddIndices(indices);
 
     objRigid1->SetVertices(SquareVertices);
     objRigid1->Init();
@@ -177,8 +175,8 @@ void Editor::Init()
     obj2.SetTransform({glm::vec3(500, 100, 0.0f), glm::vec3(0), glm::vec3(230.0f, 10.0f, 0.0f)});
     cRigidBody* objRigid2 = obj2.AddComponent<cRigidBody>();
     cRenderer* objRend2 = obj2.AddComponent<cRenderer>();
-    objRend2->AddVertices(CubeVertices);
-    objRend2->AddIndices(CubeIndices);
+    objRend2->AddVertices(vertices);
+    objRend2->AddIndices(indices);
 
     objRigid2->SetVertices(SquareVertices);
     objRigid2->Init();

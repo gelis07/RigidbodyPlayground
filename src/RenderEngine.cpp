@@ -16,21 +16,21 @@ void RenderEngine::Init()
     Shader normalShader;
     Shader CircleShader;
     normalShader
-    .AttachShader(GL_VERTEX_SHADER, "VertexShader.vs")
-    ->AttachShader(GL_FRAGMENT_SHADER, "FragmentShader.fs")
+    .AttachShader(GL_VERTEX_SHADER, "Basic.vs")
+    ->AttachShader(GL_FRAGMENT_SHADER, "Basic.fs")
     ->Init();
     CircleShader
-    .AttachShader(GL_VERTEX_SHADER, "VertexShader.vs")
+    .AttachShader(GL_VERTEX_SHADER, "Basic.vs")
     ->AttachShader(GL_FRAGMENT_SHADER, "CircleShader.fs")
     ->Init();
     
     mShaders[NORMAL] = normalShader;
     mShaders[CIRCLE] = CircleShader;
 }
-void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::vec3& lightPos, const glm::mat4& aProjection, float time)
+void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::mat4& aProjection, float time)
 {
     glClearColor(0.5f, 0.2f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     for (int i = 0; i < renderers.size(); i++) 
     {
@@ -42,8 +42,6 @@ void RenderEngine::Update(const std::vector<cRenderer*>& renderers, const glm::v
         CurrentShader.SetUniform("uColor", obj->color);
         glm::mat4 mvp = aProjection * mCamera.GetView() * obj->GetModel();
         CurrentShader.SetUniform("uMVP", mvp);
-        CurrentShader.SetUniform("LightPos", lightPos);
-        CurrentShader.SetUniform("uModel", obj->GetModel());
 
 
         if(obj->GetRenderType() == CIRCLE)

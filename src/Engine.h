@@ -9,7 +9,7 @@ class Engine
 {
     public:
         void Init();
-        void Run(Scene* scene, const glm::vec3& lightPos, bool paused,float time);
+        void Run(Scene* scene, bool paused,float time);
         RenderEngine mRenderEngine;
         PhysicsEngine mPhysicsEngine;
     private:

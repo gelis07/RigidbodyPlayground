@@ -16,7 +16,6 @@ class Editor
         GLuint fbo;
         Scene scene;
         Scene SavedScene;
-        glm::vec3 lightPos = glm::vec3(0);
         bool paused = true;
     private:
         void Dockspace();
