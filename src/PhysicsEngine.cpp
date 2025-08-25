@@ -16,11 +16,12 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
-            if(data.collided)
-            {
-                CollisionResolution(rigidbodies[a], rigidbodies[b], data);
-            }
+            CollisionData data = rigidbodies[a]->CheckCollisionsGJK2D(rigidbodies[b]);
+            std::cout << data.collided << '\n';
+            // if(data.collided)
+            // {
+            //     CollisionResolution(rigidbodies[a], rigidbodies[b], data);
+            // }
         }
     }
 }
