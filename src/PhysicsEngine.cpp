@@ -8,7 +8,7 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
 {
     for(int i = 0; i < rigidbodies.size(); i++)
     {
-        rigidbodies[i]->Update(dt);
+        // rigidbodies[i]->Update(dt);
     }
     for(int a = 0; a < rigidbodies.size(); a++)
     {
@@ -16,10 +16,16 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
+            CollisionData data = rigidbodies[a]->CheckCollisionsGJK3D(rigidbodies[b]);
             if(data.collided)
             {
-                CollisionResolution(rigidbodies[a], rigidbodies[b], data);
+                Utilities::print(data.displacement * data.normal);
+                std::cout << data.contactPoints.size() << '\n';
+                for (glm::vec3 point : data.contactPoints)
+                {
+                    Utilities::print(point);
+                }
+                // CollisionResolution(rigidbodies[a], rigidbodies[b], data);
             }
         }
     }
@@ -53,8 +59,8 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
 
             float raPerpDotN = glm::dot(rat, n);
             float rbPerpDotN = glm::dot(rbt, n);
-            glm::vec3 angLinVelA = rat * A->AngVelocity.z;
-            glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
+            glm::vec3 angLinVelA = glm::cross(A->AngVelocity, ra);
+            glm::vec3 angLinVelB = glm::cross(B->AngVelocity, rb);
             glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
             float PVelMagn = glm::dot(Vp, n);
             float denom = A->GetInvMass() + B->GetInvMass() 

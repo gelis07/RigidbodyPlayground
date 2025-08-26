@@ -1,4 +1,5 @@
 #include "cRigidbody.h"
+#include <bits/stdc++.h>
 void cRigidBody::SetVertices(const std::vector<glm::vec3>& aVertices)
 {
     mVertices = aVertices;
@@ -197,10 +198,374 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
 }
 
 
-
-CollisionData cRigidBody::CheckCollisionsGJK(cRigidBody* obj)
+glm::vec3 cRigidBody::GetFarthestPoint(const std::vector<glm::vec3>& vertices,const glm::vec3& d)
 {
-    return {};
+    glm::vec3 farthestPoint;
+    float farthestDistance = -INFINITY;
+    for(int i = 0; i < vertices.size(); i++)
+    {
+        float distance = glm::dot(d, vertices[i]);
+        if (farthestDistance < distance) 
+        {
+            farthestDistance = distance;
+            farthestPoint = vertices[i];
+        }
+    }
+    return farthestPoint;
+}
+
+glm::vec3 cRigidBody::Support(const std::vector<glm::vec3>& verticesA, const std::vector<glm::vec3>& verticesB, glm::vec3 d)
+{
+    glm::vec3 p1 = GetFarthestPoint(verticesA, d);
+    glm::vec3 p2 = GetFarthestPoint(verticesB, -d);
+
+    glm::vec3 p3 = p1 - p2;
+    return p3;
+}
+
+bool cRigidBody::SameDirection(const glm::vec3& d, const glm::vec3& ao)
+{
+    return glm::dot(d, ao) > 0;
+}
+bool cRigidBody::Line3D(Simplex& simplex, glm::vec3& d)
+{
+    glm::vec3 a = simplex[0];
+    glm::vec3 b = simplex[1];
+    glm::vec3 ab = b - a;
+    glm::vec3 ao = -a;
+
+    if(SameDirection(ab, ao))
+    {
+        d = glm::cross(glm::cross(ab, ao), ab);
+    }
+    else
+    {
+        simplex = { a };
+        d = ao; 
+    }
+    return false;
+}
+bool cRigidBody::Line2D(Simplex& simplex, glm::vec3& d)
+{
+    glm::vec3 a = simplex[0];
+    glm::vec3 b = simplex[1];
+    glm::vec3 ab = b - a;
+    glm::vec3 ao = -a;
+    glm::vec3 abp = glm::cross(glm::cross(ab, ao), ab);
+    d = abp;
+    return false;
+}
+bool cRigidBody::Triangle3D(Simplex& simplex, glm::vec3& d)
+{
+    glm::vec3 a = simplex[0];
+    glm::vec3 b = simplex[1];
+    glm::vec3 c = simplex[2];
+
+    glm::vec3 ab = b - a;
+    glm::vec3 ac = c - a;
+    glm::vec3 ao = -a;
+    glm::vec3 abc = glm::cross(ab, ac);
+    if(SameDirection(glm::cross(abc, ac), ao))
+    {
+        if(SameDirection(ac, ao))
+        {
+            simplex = {a , c};
+            d = glm::cross(glm::cross(ac, ao), ac);
+        }
+        else
+        {
+            simplex =  {a, b};
+            return Line3D(simplex, d);
+        }
+    }
+    else
+    {
+        if(SameDirection(glm::cross(ab, abc), ao))
+        {
+            simplex = {a,b};
+            return Line3D(simplex, d);
+        }else
+        {
+            if(SameDirection(abc, ao))
+            {
+                d = abc;
+            }else
+            {
+                simplex = {a , c, b};
+                d = -abc;
+            }
+        }
+    }
+    return false;
+}
+bool cRigidBody::Triangle2D(Simplex& simplex, glm::vec3& d)
+{
+    glm::vec3 a = simplex[0];
+    glm::vec3 b = simplex[1];
+    glm::vec3 c = simplex[2];
+
+    glm::vec3 ab = b - a;
+    glm::vec3 ac = c - a;
+    glm::vec3 ao = -a;
+    glm::vec3 acp = glm::cross(glm::cross(ab, ac), ac);
+    glm::vec3 abp = glm::cross(glm::cross(ac, ab), ab);
+    if(SameDirection(abp, ao))
+    {
+        simplex =  {a, b};
+        d = abp;
+        return false;
+    }
+    else if(SameDirection(acp, ao))
+    {
+        simplex = {a, c};
+        d = acp;
+        return false;
+    }
+    return true;
+}
+bool cRigidBody::Tetrahedron(Simplex& simplex, glm::vec3& dir)
+{
+    glm::vec3 a = simplex[0];
+    glm::vec3 b = simplex[1];
+    glm::vec3 c = simplex[2];
+    glm::vec3 d = simplex[3];
+
+    glm::vec3 ab = b - a;
+    glm::vec3 ac = c - a;
+    glm::vec3 ad = d - a;
+    glm::vec3 ao = -a;
+
+    glm::vec3 abc = glm::cross(ab, ac);
+    glm::vec3 acd = glm::cross(ac, ad);
+    glm::vec3 adb = glm::cross(ad, ab);
+    if(SameDirection(abc, ao))
+    {
+        simplex = {a,b,c};
+        return Triangle3D(simplex, dir);
+    }
+    if(SameDirection(acd, ao))
+    {
+        simplex = {a,c,d};
+        return Triangle3D(simplex, dir);
+    }
+    if(SameDirection(adb, ao))
+    {
+        simplex = {a,d,b};
+        return Triangle3D(simplex, dir);
+    }
+    return true;
+}
+
+bool cRigidBody::NextSimplex3D(Simplex& simplex, glm::vec3& d)
+{
+    switch(simplex.size())
+    {
+        case 2: return Line3D(simplex, d);
+        case 3: return Triangle3D(simplex, d);
+        case 4: return Tetrahedron(simplex, d);
+    }
+    return false;
+}
+bool cRigidBody::NextSimplex2D(Simplex& simplex, glm::vec3& d)
+{
+    switch(simplex.size())
+    {
+        case 2: return Line2D(simplex, d);
+        case 3: return Triangle2D(simplex, d);
+    }
+    return false;
+}
+//Only because of these videos I managed to understand this algorithm. Thanks a ton!
+//https://www.youtube.com/watch?v=MDusDn8oTSE
+//https://www.youtube.com/watch?v=ajv46BSqcK4
+CollisionData cRigidBody::CheckCollisionsGJK3D(cRigidBody* obj)
+{
+    const std::vector<glm::vec3>& verticesA = GetWorldCoordinates();
+    const std::vector<glm::vec3>& verticesB = obj->GetWorldCoordinates();
+    glm::vec3 d(1, 0, 0);
+    Simplex Simplex;
+    glm::vec3 support = Support(verticesA, verticesB, d);
+    Simplex.PushFront(support);
+    d = -support;
+    while(true)
+    {
+        support = Support(verticesA, verticesB, d);
+        if(glm::dot(support, d) <= 0)
+        {
+            return {false, glm::vec3(0), {}};
+        }
+        Simplex.PushFront(support);
+        if(NextSimplex3D(Simplex, d))
+        {
+            CollisionData epa = EPA(Simplex, verticesA, verticesB);
+            if(obj->GetStatic())
+            {
+                mTransform->position += -epa.normal * epa.displacement;
+            }
+            else if(GetStatic())
+            {
+                obj->mTransform->position += epa.normal * epa.displacement;
+            }
+            else{
+                mTransform->position += -epa.normal * epa.displacement * 0.5f;
+                obj->mTransform->position += epa.normal * epa.displacement * 0.5f;
+            }
+            return epa;
+        }
+    }
+    return {false};
+}
+
+
+CollisionData cRigidBody::EPA(const Simplex& simplex, const std::vector<glm::vec3>& verticesA, const std::vector<glm::vec3>& verticesB)
+{
+    std::vector<glm::vec3> polytope(simplex.begin(), simplex.end());
+    std::vector<size_t> faces = 
+    {
+        0, 1, 2,
+        0, 3, 1,
+        0, 2, 3,
+        1,3, 2
+    };
+
+    auto [normals, minFace] = GetFaceNormals(polytope, faces);
+
+    glm::vec3 minNormal;
+    float minDistance = INFINITY;
+    while(minDistance == INFINITY)
+    {
+        minNormal = glm::vec3(normals[minFace]);
+        minDistance = normals[minFace].w;
+        glm::vec3 support = Support(verticesA, verticesB, minNormal);
+        float sDistance = glm::dot(minNormal, support);
+        if(glm::abs(sDistance - minDistance) > 0.001f)
+        {
+            minDistance = INFINITY;
+        }
+        std::vector<std::pair<size_t, size_t>> uniqueEdges;
+        for (int i = 0; i < normals.size(); i++)
+        {
+            if(SameDirection(normals[i], support))
+            {
+                size_t f = i * 3;
+                AddIfUniqueEdge(uniqueEdges, faces, f, f+1);
+                AddIfUniqueEdge(uniqueEdges, faces, f+1, f+2);
+                AddIfUniqueEdge(uniqueEdges, faces, f+2, f);
+
+                faces[f+2]= faces.back(); faces.pop_back();
+                faces[f+1]= faces.back(); faces.pop_back();
+                faces[f]= faces.back(); faces.pop_back();
+
+                normals[i] = normals.back();
+                normals.pop_back();
+                i--;
+            }
+        }
+        std::vector<size_t> newFaces;
+        for(auto [edgeIndex1, edgeIndex2] : uniqueEdges)
+        {
+            newFaces.push_back(edgeIndex1);
+            newFaces.push_back(edgeIndex2);
+            newFaces.push_back(polytope.size());
+        }
+        polytope.push_back(support);
+        auto [newNormals, newMinFace] = GetFaceNormals(polytope, newFaces);
+        float oldMinDistance = INFINITY;
+        for(int i = 0; i < normals.size(); i++)
+        {
+            if(normals[i].w < oldMinDistance)
+            {
+                oldMinDistance = normals[i].w;
+                minFace = i;
+            }
+        }
+        if(newNormals[newMinFace].w < oldMinDistance)
+        {
+            minFace = newMinFace + normals.size();
+        }
+        faces.insert(faces.end(), newFaces.begin(), newFaces.end());
+        normals.insert(normals.end(), newNormals.begin(), newNormals.end());
+    }
+    CollisionData data;
+    data.collided = true;
+    data.displacement = minDistance + 0.001f;
+    data.normal = minNormal;
+    return data;
+}
+
+
+
+
+void cRigidBody::AddIfUniqueEdge(std::vector<std::pair<size_t, size_t>>& edges, const std::vector<size_t>& faces, size_t a, size_t b)
+{
+    auto reverse = std::find(edges.begin(), edges.end(), std::make_pair(faces[b], faces[a]));
+    if(reverse != edges.end())
+    {
+        edges.erase(reverse);
+    }else
+    {
+        edges.emplace_back(faces[a], faces[b]);
+    }
+}
+
+
+std::pair<std::vector<glm::vec4>, size_t> cRigidBody::GetFaceNormals(
+	const std::vector<glm::vec3>& polytope,
+	const std::vector<size_t>& faces)
+{
+	std::vector<glm::vec4> normals;
+	size_t minTriangle = 0;
+	float  minDistance = FLT_MAX;
+
+	for (size_t i = 0; i < faces.size(); i += 3) {
+		glm::vec3 a = polytope[faces[i    ]];
+		glm::vec3 b = polytope[faces[i + 1]];
+		glm::vec3 c = polytope[faces[i + 2]];
+
+		glm::vec3 normal = glm::normalize(glm::cross(b - a, c - a));
+		float distance = dot(normal, a);
+
+		if (distance < 0) {
+			normal   *= -1;
+			distance *= -1;
+		}
+
+		normals.emplace_back(normal, distance);
+
+		if (distance < minDistance) {
+			minTriangle = i / 3;
+			minDistance = distance;
+		}
+	}
+
+	return { normals, minTriangle };
+}
+
+
+
+CollisionData cRigidBody::CheckCollisionsGJK2D(cRigidBody* obj)
+{
+    const std::vector<glm::vec3>& verticesA = GetWorldCoordinates();
+    const std::vector<glm::vec3>& verticesB = obj->GetWorldCoordinates();
+    glm::vec3 d(1, 0, 0);
+    Simplex Simplex;
+    glm::vec3 support = Support(verticesA, verticesB, d);
+    Simplex.PushFront(support);
+    d = -support;
+    while(true)
+    {
+        support = Support(verticesA, verticesB, d);
+        if(glm::dot(support, d) <= 0)
+        {
+            return {false, glm::vec3(0), {}};
+        }
+        Simplex.PushFront(support);
+        if(NextSimplex2D(Simplex, d))
+        {
+            return {true};
+        }
+    }
+    return {false};
 }
 
 std::vector<glm::vec3> cRigidBody::GetCollisionPoints(const std::vector<glm::vec3>& verticesA, const std::vector<glm::vec3>& verticesB, glm::vec3 normal)

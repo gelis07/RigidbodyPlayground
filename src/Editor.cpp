@@ -171,7 +171,7 @@ void Editor::Init()
     objRend1->AddVertices(CubeVertices);
     objRend1->AddIndices(CubeIndices);
 
-    objRigid1->SetVertices(SquareVertices);
+    objRigid1->SetVertices(CubeVerticesPhysics);
     objRigid1->Init();
 
     obj2.SetTransform({glm::vec3(500, 100, 0.0f), glm::vec3(0), glm::vec3(230.0f, 10.0f, 0.0f)});
@@ -180,7 +180,7 @@ void Editor::Init()
     objRend2->AddVertices(CubeVertices);
     objRend2->AddIndices(CubeIndices);
 
-    objRigid2->SetVertices(SquareVertices);
+    objRigid2->SetVertices(CubeVerticesPhysics);
     objRigid2->Init();
     objRigid2->SetStatic(true);
     

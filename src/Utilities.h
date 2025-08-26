@@ -121,6 +121,17 @@ inline std::vector<glm::vec3> SquareVertices =
     glm::vec3( 0.5f,  0.5f, 0.0f) 
 };
 
+inline std::vector<glm::vec3> CubeVerticesPhysics =
+{
+    glm::vec3(-1, -1, -1),
+    glm::vec3(1, -1, -1),
+    glm::vec3(1, 1, -1),
+    glm::vec3(-1, 1, -1),
+    glm::vec3(-1, -1, 1),
+    glm::vec3(1, -1, 1),
+    glm::vec3(1, 1, 1),
+    glm::vec3(-1, 1, 1)
+};
 
 inline std::vector<int> indices = 
 {
