@@ -42,3 +42,4 @@
 *.idx
 
 CMakeLists.txt
+Build/
