@@ -33,7 +33,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
     A->CalculateMassIner();
     B->CalculateMassIner();
     glm::vec3 n = data.normal;
-    float e = 1.0f;
+    float e = 0.0f;
     const int iterations = 15;
     float sf = (A->GetSf() + B->GetSf()) * 0.5f;
     float df = (A->GetDf() + B->GetDf()) * 0.5f;
