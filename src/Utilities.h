@@ -48,7 +48,6 @@ struct Transform
 namespace Utilities
 {
 
-
     inline float RoundToDecimal(float value, int place)
     {
         return glm::ceil(value * glm::pow(10, place)) / glm::pow(10, place);

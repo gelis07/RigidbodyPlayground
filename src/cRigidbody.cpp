@@ -522,6 +522,8 @@ Edge cRigidBody::Best(glm::vec3 normal, const std::vector<glm::vec3>& vertices)
         e.max = (glm::dot(v, normal) > glm::dot(v1, normal)) ? v : v1;
         return e;
     }
+
+
 }
 
 
