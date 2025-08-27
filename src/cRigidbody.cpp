@@ -464,13 +464,15 @@ std::vector<glm::vec3> cRigidBody::GetCollisionPoints(const std::vector<glm::vec
         refNorm *= -1.0f;
 
     float max = glm::dot(refNorm, ref.max);
-    if (glm::dot(refNorm, cp2[0]) - max < 0.0f) {
-        cp2.erase(cp2.begin());
+    std::vector<glm::vec3> kept;
+    for(glm::vec3& p : cp2)
+    {
+        if(glm::dot(refNorm, p) - max >= 0.0f)
+        {
+            kept.push_back(p);
+        }
     }
-    if (glm::dot(refNorm, cp2[1]) - max < 0.0f) {
-        cp2.erase(cp2.begin() + 1);
-    }
-    return cp2;
+    return kept;
 }
 std::vector<glm::vec3> cRigidBody::Clip(glm::vec3 v1, glm::vec3 v2, glm::vec3 n, float o)
 {

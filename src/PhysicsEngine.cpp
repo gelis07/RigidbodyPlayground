@@ -16,12 +16,12 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            CollisionData data = rigidbodies[a]->CheckCollisionsGJK2D(rigidbodies[b]);
+            CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             std::cout << data.collided << '\n';
-            // if(data.collided)
-            // {
-            //     CollisionResolution(rigidbodies[a], rigidbodies[b], data);
-            // }
+            if(data.collided)
+            {
+                CollisionResolution(rigidbodies[a], rigidbodies[b], data);
+            }
         }
     }
 }
@@ -33,7 +33,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
     A->CalculateMassIner();
     B->CalculateMassIner();
     glm::vec3 n = data.normal;
-    float e = 0.0f;
+    float e = 1.0f;
     const int iterations = 15;
     float sf = (A->GetSf() + B->GetSf()) * 0.5f;
     float df = (A->GetDf() + B->GetDf()) * 0.5f;
@@ -62,7 +62,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
             + (raPerpDotN * raPerpDotN) * A->GetInvInertia()
             + (rbPerpDotN * rbPerpDotN) * B->GetInvInertia();
 
-            float Impulse = -(1.0f+e) * glm::dot(Vp, n) / (denom * data.contactPoints.size());
+            float Impulse = -(1.0f+e) * glm::dot(Vp, n) / denom;
             ImpData[p] = {ra, rb, Impulse};
             //*Gauss-seidel method
             A->velocity += Impulse * n * A->GetInvMass();
@@ -108,7 +108,7 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
             + (rbPerpDotT * rbPerpDotT) * B->GetInvInertia();
 
             float ImpulseFriction = 0.0f;
-            ImpulseFriction = -glm::dot(Vp, tangent) / (denom * data.contactPoints.size());
+            ImpulseFriction = -glm::dot(Vp, tangent) / denom;
             glm::vec3 Friction(0);
             if(glm::abs(ImpulseFriction) <= ImpData[p].j * sf)
             {
