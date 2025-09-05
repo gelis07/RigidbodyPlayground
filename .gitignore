@@ -40,3 +40,8 @@
 # debug information files
 *.dwo
 *.idx
+
+CMakeLists.txt
+Build/
+.cache/
+.clangd/
