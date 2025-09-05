@@ -50,5 +50,6 @@ void Engine::Run(Scene* scene,bool paused, float time)
     //     Entity& entity = scene->entities[i];
     //     entity.Update();
     // }
+    //TEST
     mRenderEngine.Update(scene->renderers, mProjection, time);
 }
