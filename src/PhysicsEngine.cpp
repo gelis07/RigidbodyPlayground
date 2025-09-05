@@ -55,10 +55,10 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         std::cout << j << '\n';
         glm::vec3 impulse = j * n;
         A->velocity += impulse * A->GetInvMass();
-        // A->AngVelocity += glm::cross(ra, impulse) * A->GetInvInertia();
+        A->AngVelocity += glm::cross(ra, impulse) * A->GetInvInertia();
         
         B->velocity += -impulse * B->GetInvMass();
-        // B->AngVelocity += -glm::cross(rb, impulse) * B->GetInvInertia();
+        B->AngVelocity += -glm::cross(rb, impulse) * B->GetInvInertia();
     }
     else if(data.contactPoints.size() == 2)
     {
@@ -130,13 +130,12 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         glm::vec3 tangent1 = Vps[0] - glm::dot(Vps[0], n) * n;
         glm::vec3 tangent2 = Vps[1] - glm::dot(Vps[1], n) * n;
 
-        
 
         A->velocity += (j1 + j2) * n * A->GetInvMass();
-        // A->AngVelocity += Utilities::RoundToDecimal((glm::cross(ras[0], j1 * n) + glm::cross(ras[1], j2 * n)) * A->GetInvInertia(), 4);
+        A->AngVelocity += Utilities::RoundToDecimal((glm::cross(ras[0], j1 * n) + glm::cross(ras[1], j2 * n)) * A->GetInvInertia(), 4);
 
         B->velocity += -(j1+j2) * n * B->GetInvMass();
-        // B->AngVelocity += -(glm::cross(rbs[0], j1*n) + glm::cross(rbs[1], j2*n)) * B->GetInvInertia();
+        B->AngVelocity += -(glm::cross(rbs[0], j1*n) + glm::cross(rbs[1], j2*n)) * B->GetInvInertia();
     }
 
 }
