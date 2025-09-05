@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(PhysicsEngine)
 
-
+#I dont think anyone is watching this repository but incase someone came here, of course you have to download glad, glfw
+#imguidocking branch and glm but i just have local directory "sdk"
+#to be clear its not meant for other people to be here.
 include_directories(C:/sdk/glad/include)
 include_directories(C:/sdk/GLFW/include)
 include_directories(C:/sdk/ImGuiDocking/backends/)
