@@ -8,7 +8,7 @@ struct ImpulseData
 {
     glm::vec3 ra;
     glm::vec3 rb;
-    float j;
+    float jAcc = 0.0f;
 };
 
 class PhysicsEngine

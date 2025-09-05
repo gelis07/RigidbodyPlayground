@@ -12,6 +12,7 @@
 #include <unordered_set>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <gtx/norm.hpp>
+#include <cmath>
 #define PI 3.141592
 
 #define WIDTH 1280.0f
