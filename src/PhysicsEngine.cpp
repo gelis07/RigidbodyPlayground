@@ -6,8 +6,6 @@ void PhysicsEngine::Init()
 
 void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt)
 {
-    //comment test
-    //commit test 2
     for(int i = 0; i < rigidbodies.size(); i++)
     {
         rigidbodies[i]->Update(dt);
@@ -52,13 +50,38 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
         glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
         float j = glm::max(0.0f, -(e+1)*glm::dot(Vp,n) / M11);
-        std::cout << j << '\n';
         glm::vec3 impulse = j * n;
         A->velocity += impulse * A->GetInvMass();
         A->AngVelocity += glm::cross(ra, impulse) * A->GetInvInertia();
         
         B->velocity += -impulse * B->GetInvMass();
         B->AngVelocity += -glm::cross(rb, impulse) * B->GetInvInertia();
+
+        //Update do new velocities.
+        Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
+        glm::vec3 t = Vp - glm::dot(Vp, n) * n;
+        if(!Utilities::AlmostEqual(glm::length2(t), 0.0f))
+            t = glm::normalize(t);
+        else
+            return;
+
+        float MF = A->GetInvMass() + B->GetInvMass() +
+        glm::dot(t, rat) * glm::dot(t, rat) * A->GetInvInertia() + 
+        glm::dot(t, rbt) * glm::dot(t, rbt) * B->GetInvInertia();
+
+        float StopVel = -glm::dot(Vp, t);
+        float jf = StopVel / MF;
+        glm::vec3 friction(0);
+        if(glm::abs(jf) <= j * df)
+            friction = jf * t;
+        else
+            friction = j * df * -t;
+
+        A->velocity += friction * A->GetInvMass();
+        A->AngVelocity += glm::cross(ra, friction) * A->GetInvInertia();
+        
+        B->velocity += -friction * B->GetInvMass();
+        B->AngVelocity += -glm::cross(rb, friction) * B->GetInvInertia();
     }
     else if(data.contactPoints.size() == 2)
     {
@@ -106,11 +129,12 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
             that equation holds for each point (ufp is the final position of the collision point p same for uip)
             you can come to the above system of equations (1),(2) with some algebra.
         */
-        float a = -(e+1) * glm::dot(Vps[0], n); 
-        float b = -(e+1) * glm::dot(Vps[1], n); 
+        //final velocities for each collision point 
+        float NewCV1 = -(e+1) * glm::dot(Vps[0], n); 
+        float NewCV2 = -(e+1) * glm::dot(Vps[1], n); 
         
-        float j1 = glm::max(0.0f, (M[0][1] * b - M[1][1]*a) / (M[0][1] * M[0][1] - M[0][0] * M[1][1]));
-        float j2 = glm::max(0.0f, (b * M[0][0] - a * M[0][1]) / (M[1][1] * M[0][0] - M[1][0] * M[0][1]));
+        float j1 = glm::max(0.0f, (M[0][1] * NewCV2 - M[1][1]*NewCV1) / (M[0][1] * M[0][1] - M[0][0] * M[1][1]));
+        float j2 = glm::max(0.0f, (NewCV2 * M[0][0] - NewCV1 * M[0][1]) / (M[1][1] * M[0][0] - M[1][0] * M[0][1]));
 
         /*
             One of the impulses is negative or doesnt exist, so the other impulse has to be 
@@ -121,21 +145,89 @@ void PhysicsEngine::CollisionResolution(cRigidBody* A, cRigidBody* B, const Coll
         */
         if(j1 == 0.0f)
         {
-            j2 = a / M[0][1];
+            j2 = NewCV1 / M[0][1];
         }else if(j2 == 0.0f)
         {
-            j1 = a / M[0][0];
+            j1 = NewCV1 / M[0][0];
         }
-
-        glm::vec3 tangent1 = Vps[0] - glm::dot(Vps[0], n) * n;
-        glm::vec3 tangent2 = Vps[1] - glm::dot(Vps[1], n) * n;
-
 
         A->velocity += (j1 + j2) * n * A->GetInvMass();
         A->AngVelocity += Utilities::RoundToDecimal((glm::cross(ras[0], j1 * n) + glm::cross(ras[1], j2 * n)) * A->GetInvInertia(), 4);
 
         B->velocity += -(j1+j2) * n * B->GetInvMass();
         B->AngVelocity += -(glm::cross(rbs[0], j1*n) + glm::cross(rbs[1], j2*n)) * B->GetInvInertia();
+
+        for (int i = 0; i < data.contactPoints.size(); i++)
+        {
+            glm::vec3 angLinVelA = rats[i] * A->AngVelocity.z;
+            glm::vec3 angLinVelB = rbts[i] * B->AngVelocity.z;
+            Vps[i] = A->velocity + angLinVelA - B->velocity - angLinVelB;
+        } 
+
+        std::vector<glm::vec3> ts(data.contactPoints.size());
+        for(int i = 0; i < data.contactPoints.size(); i++)
+        {
+            if(!Utilities::AlmostEqual(glm::length2(Vps[i] - glm::dot(Vps[i], n) * n), 0.0f))
+                ts[i] = glm::normalize(Vps[i] - glm::dot(Vps[i], n) * n);
+            else
+                continue;
+        }
+        glm::mat2x2 MF;
+
+        for(int i = 0; i < data.contactPoints.size(); i++)
+        {
+            for(int j = 0; j < data.contactPoints.size(); j++)
+            {
+                MF[i][j] = glm::dot(ts[i], ts[j]) * A->GetInvMass() + glm::dot(ts[i], ts[j]) * B->GetInvMass() +
+                glm::dot(ts[i], rats[i]) * glm::dot(ts[j], rats[j]) * A->GetInvInertia() +
+                glm::dot(ts[i], rbts[i]) * glm::dot(ts[j], rbts[j]) * B->GetInvInertia();
+            }
+        }
+        float StopV1 = -glm::dot(Vps[0], ts[0]);
+        float StopV2 = -glm::dot(Vps[1], ts[1]);
+
+        float jf1 = 0.0f;
+        float jf2 = 0.0f;
+
+        if(Utilities::AlmostEqual(MF[0][1] * MF[1][0] - MF[0][0] * MF[1][1], 0.0f) || Utilities::AlmostEqual(MF[1][1] * MF[0][0] - MF[1][0] * MF[1][0], 0.0f))
+        {
+            //! add a comment explaining here
+            jf1 = StopV1 / (2.0f * MF[0][0]);
+            jf2 = jf1;
+        }else{
+            jf1 = (StopV2 * MF[1][0] - StopV1*MF[1][1]) / (MF[0][1] * MF[1][0] - MF[0][0] * MF[1][1]);
+            jf2 = (StopV2 * MF[0][0] - StopV1*MF[1][0]) / (MF[1][1] * MF[0][0] - MF[1][0] * MF[1][0]);
+        }
+        glm::vec3 f1(0);
+        glm::vec3 f2(0);
+        if(jf1 == 0.0f)
+        {
+            jf2 = StopV1 / MF[1][0];
+        }else if(jf2 == 0.0f)
+        {
+            jf1 = StopV1 / MF[0][0];
+        }
+        if(glm::abs(jf1) <= df * j1)
+        {
+            f1 = jf1 * ts[0];
+        }else
+        {
+            f1 = df * j1 * -ts[0];
+        }
+        
+        if(glm::abs(jf2) <= df * j2)
+        {
+            f2 = jf2 * ts[1];
+        }else
+        {
+            f2 = df * j2 * -ts[1];
+        }
+
+        A->velocity += (f1 + f2) * A->GetInvMass();
+        A->AngVelocity += Utilities::RoundToDecimal((glm::cross(ras[0], f1) + glm::cross(ras[1], f2)) * A->GetInvInertia(), 4);
+
+        B->velocity += -(f1+f2) * B->GetInvMass();
+        B->AngVelocity += -(glm::cross(rbs[0], f1) + glm::cross(rbs[1], f2)) * B->GetInvInertia();
     }
 
 }

@@ -11,6 +11,8 @@
 #include <gtc/type_ptr.hpp>
 #include <unordered_set>
 #define GLM_ENABLE_EXPERIMENTAL
+#define FMT_HEADER_ONLY
+#include <core.h>
 #include <gtx/norm.hpp>
 #include <cmath>
 #define PI 3.141592
@@ -89,7 +91,7 @@ namespace Utilities
 
     inline void print(const glm::vec3& vec)
     {
-        std::cout << vec.x << ", " << vec.y << ", " << vec.z << '\n';
+        fmt::print("{} , {}, {}\n", vec.x, vec.y, vec.z);
     }
     inline std::string LoadFileAsString(const std::string& aFileName)
     {
