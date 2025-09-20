@@ -3,6 +3,7 @@
 #include "App.h"
 #define PHYSICS_TIMESTEP 0.02f
 #define PHYSICS_ITERATIONS 20.0f
+
 void Engine::Init()
 {
     mRenderEngine.Init();
@@ -21,26 +22,30 @@ void Engine::Run(Scene* scene,bool paused, float time)
 {
 
     mProjection = glm::ortho(0.0f, scene->width, 0.0f, scene->height, -1.0f, 1.0f);
-    // mProjection = glm::perspective(glm::radians(45.0f), scene->width / scene->height, 0.1f, 1000.0f);
 
     float currentTime = glfwGetTime();
     float deltaTime = currentTime - lastTime;
     lastTime = currentTime;
-
+    mPhysicsEngine.DebugUI();
     if(paused)
     {
         if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_RIGHT))
-            mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP);
-    }else
-    {
-        accumalator += deltaTime;
-        while (accumalator >= 0.02f)
         {
             for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
             {
                 mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
             }
-            accumalator -= 0.02f;
+        }
+    }else
+    {
+        accumalator += deltaTime;
+        while (accumalator >= PHYSICS_TIMESTEP)
+        {
+            for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
+            {
+                mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
+            }
+            accumalator -= PHYSICS_TIMESTEP;
         }
     }
     if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_SPACE))
@@ -50,6 +55,5 @@ void Engine::Run(Scene* scene,bool paused, float time)
     //     Entity& entity = scene->entities[i];
     //     entity.Update();
     // }
-    //TEST
     mRenderEngine.Update(scene->renderers, mProjection, time);
 }

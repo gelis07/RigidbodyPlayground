@@ -81,6 +81,7 @@ void Editor::Hierachy()
         obj1.SetTransform({glm::vec3(0, 0, 0.0f), glm::vec3(0), glm::vec3(100.0f)});
         cRigidBody* objRigid1 = obj1.AddComponent<cRigidBody>();
         cRenderer* objRend1 = obj1.AddComponent<cRenderer>();
+        objRend1->color = glm::vec4(Utilities::RandomFloat(), Utilities::RandomFloat(), Utilities::RandomFloat(), 1.0f);
         objRend1->AddVertices(vertices);
         objRend1->AddIndices(indices);
 

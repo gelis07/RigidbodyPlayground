@@ -8,6 +8,7 @@ void App::GLFWErrorCallBack(int error, const char* description)
 
 void App::Init()
 {
+    srand(time(0));
     Log(!glfwInit(), "Couldn't Initialize glfw");
     glfwSetErrorCallback(GLFWErrorCallBack);
 

@@ -14,7 +14,9 @@
 #define FMT_HEADER_ONLY
 #include <core.h>
 #include <gtx/norm.hpp>
+#include <bits/stdc++.h>
 #include <cmath>
+#include <limits.h>
 #define PI 3.141592
 
 #define WIDTH 1280.0f
@@ -72,7 +74,10 @@ namespace Utilities
         return sum;
     }
 
-
+    inline float RandomFloat()
+    {
+        return (float)(rand()) / (float)(RAND_MAX);
+    }
 
     inline glm::vec3 ToWorldCoordinates(Transform trans, glm::vec3 point)
     {

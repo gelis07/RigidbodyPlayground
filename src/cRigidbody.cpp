@@ -21,6 +21,7 @@ cRigidBody::cRigidBody(Entity* entity) : Component(entity)
 void cRigidBody::Init()
 {
     InertiaCenter = (1.0f/12.0f) * mMass * (mTransform->scale.x * mTransform->scale.x + mTransform->scale.y * mTransform->scale.y);
+    
     mInvMass = 1.0f / mMass;
     InvInertiaCenter = 1.0f / InertiaCenter;
 }
