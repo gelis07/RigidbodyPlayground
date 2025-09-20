@@ -8,7 +8,13 @@ struct ImpulseData
 {
     glm::vec3 dir;
     glm::vec3 point;
-    glm::vec3 t; // for friction
+
+    size_t DminLimit = -1;
+    size_t DmaxLimit = -1;
+
+    // if DminLimit or DmaxLimit exists then these variables are multipliers for the dependend limit.
+    float CminLimit = -INFINITY;  
+    float CmaxLimit = INFINITY; 
 };
 
 struct ImpulseActData
@@ -31,7 +37,7 @@ struct Collision
     std::vector<size_t> objects;
     glm::vec3 point;
     glm::vec3 normal;
-    std::vector<size_t> impulsesOnCol;
+    float constant = 0.0f;
 };
 
 class PhysicsEngine
@@ -40,15 +46,16 @@ class PhysicsEngine
         void Init();
         void Update(const std::vector<cRigidBody*>& rigidbodies, float time);
         void DebugUI();
-        void CollisionResolution(size_t A, size_t B, const CollisionData& data);
+        void CollisionResolution(const std::vector<cRigidBody*>& rigidbodies,size_t A, size_t B, const CollisionData& data);
         void SolveLinearSystem(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
         void SolveLinearSystemF(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
     private:
         std::vector<float> impulses = std::vector<float>(0);
-        std::vector<float> frictionImpulses = std::vector<float>(0);
+        // std::vector<float> frictionImpulses = std::vector<float>(0);
         std::vector<ImpulseData> mImpulses;
+        std::vector<ImpulseData> mFrictionImpulses;
         std::vector<Collision> mCollisions;
         std::vector<CollisionObject> mColObjects;
         bool enableFriction = true;

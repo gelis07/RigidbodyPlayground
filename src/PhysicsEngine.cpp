@@ -12,7 +12,7 @@ void PhysicsEngine::DebugUI()
     ImGui::Checkbox("Enable Friction", &enableFriction);
     ImGui::End();
 }
-
+float e = 0.0f;
 void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt)
 {
     mColObjects.resize(rigidbodies.size());
@@ -29,15 +29,16 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
             CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
             {
-                CollisionResolution(a, b, data);
+                CollisionResolution(rigidbodies, a, b, data);
             }
         }
     }
     if(mCollisions.size() > 0)
     {
-        std::vector<std::vector<float>> matrix(mCollisions.size(), std::vector<float>(mCollisions.size(), 0.0f));
-        std::vector<float> c(mCollisions.size());
-        float e = 0.0f;
+        std::vector<std::vector<float>> matrix(mCollisions.size() * 2, std::vector<float>(mCollisions.size() * 2, 0.0f));
+        std::vector<float> c(mCollisions.size() * 2);
+        impulses.resize(c.size(), 0.0f);
+
         for(int i = 0; i < mCollisions.size(); i++)
         {
             for(int j = 0; j < mCollisions[i].objects.size(); j++)
@@ -63,21 +64,9 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
                     glm::dot(rit, impDir) * glm::dot(rpt, mCollisions[i].normal) * rb->GetInvInertia());
                 }
             }
-            cRigidBody* A = rigidbodies[mCollisions[i].objects[0]];
-            cRigidBody* B = rigidbodies[mCollisions[i].objects[1]];
-            glm::vec3 ra = mCollisions[i].point - A->GetTransform().position;
-            glm::vec3 rbp = mCollisions[i].point - B->GetTransform().position;
-            glm::vec3 rat = glm::vec3(-ra.y , ra.x, 0);
-            glm::vec3 rbt = glm::vec3(-rbp.y , rbp.x, 0);
-
-            glm::vec3 angLinVelA = rat * A->AngVelocity.z;
-            glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
-            glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
-            c[i] = -(e+1.0f) * glm::dot(Vp, mCollisions[i].normal);
-            // fmt::println("{}", c[i]);
+            c[i] = mCollisions[i].constant;
         }
 
-        impulses.resize(c.size(), 0.0f);
 
 
         SolveLinearSystem(&impulses, matrix, c);
@@ -92,32 +81,6 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
                 rb->velocity += imp.mult * impulses[imp.id] * data.dir * rb->GetInvMass();  
                 rb->AngVelocity += (float)imp.mult * glm::cross(r, impulses[imp.id] * data.dir) * rb->GetInvInertia();  
             }
-        }
-
-        for (int i = 0; i < mCollisions.size(); i++)
-        {
-            cRigidBody* A = rigidbodies[mCollisions[i].objects[0]];
-            cRigidBody* B = rigidbodies[mCollisions[i].objects[1]];
-            glm::vec3 ra = mCollisions[i].point - A->GetTransform().position;
-            glm::vec3 rbp = mCollisions[i].point - B->GetTransform().position;
-            glm::vec3 rat = glm::vec3(-ra.y , ra.x, 0);
-            glm::vec3 rbt = glm::vec3(-rbp.y , rbp.x, 0);
-            glm::vec3 angLinVelA = rat * A->AngVelocity.z;
-            glm::vec3 angLinVelB = rbt * B->AngVelocity.z;
-            glm::vec3 Vp = A->velocity + angLinVelA - B->velocity - angLinVelB;
-            glm::vec3 t(0);
-            glm::vec3 tangentVel = Vp - glm::dot(Vp, mCollisions[i].normal) * mCollisions[i].normal;
-            if (glm::length2(tangentVel) > 1e-8f)
-                t = glm::normalize(tangentVel);
-            else
-                t = glm::vec3(0);
-            if(!Utilities::AlmostEqual(glm::length2(t), 0.0f))
-                t = glm::normalize(t);
-            else
-                t = glm::vec3(0);
-
-            mImpulses[i].t = t;
-
         }
     }
 
@@ -134,7 +97,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
         return;
     }
     const size_t n = constants.size();
-    const int max_iters = 15;
+    const int max_iters = 10;
 
     for (int iter = 0; iter < max_iters; iter++) {
         for (int i = 0; i < n; i++) {
@@ -145,23 +108,61 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
                 }
             }
             if (std::abs(matrix[i][i]) < 1e-8) {
-                std::cerr << "Zero diagonal at row " << i << "\n";
+                // std::cerr << "Zero diagonal at row " << i << "\n";
                 continue;
             }
-            (*output)[i] = glm::max(0.0, (constants[i] - sum) / matrix[i][i]);
+            double min, max;
+
+            if(mImpulses[i].DmaxLimit == -1)
+                max = mImpulses[i].CmaxLimit;
+            else
+                max = impulses[mImpulses[i].DmaxLimit] * mImpulses[i].CmaxLimit;
+
+            if(mImpulses[i].DminLimit == -1)
+                min = mImpulses[i].CminLimit;
+            else
+                min = impulses[mImpulses[i].DminLimit] * mImpulses[i].CminLimit;
+
+            (*output)[i] = glm::clamp((constants[i] - sum) / matrix[i][i], min, max);
         }
     }
 }
 
 
 
-void PhysicsEngine::CollisionResolution(size_t A, size_t B, const CollisionData& data)
+void PhysicsEngine::CollisionResolution(const std::vector<cRigidBody*>& rigidbodies, size_t A, size_t B, const CollisionData& data)
 {
     for (int i =0; i < data.contactPoints.size(); i++)
     {
-        mImpulses.push_back({data.normal, data.contactPoints[i]});
-        mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-1, 1});
+        cRigidBody* bA = rigidbodies[A];
+        cRigidBody* bB = rigidbodies[B];
+        glm::vec3 ra = data.contactPoints[i] - bA->GetTransform().position;
+        glm::vec3 rbp = data.contactPoints[i] - bB->GetTransform().position;
+        glm::vec3 rat = glm::vec3(-ra.y , ra.x, 0);
+        glm::vec3 rbt = glm::vec3(-rbp.y , rbp.x, 0);
+        glm::vec3 angLinVelA = rat * bA->AngVelocity.z;
+        glm::vec3 angLinVelB = rbt * bB->AngVelocity.z;
+        glm::vec3 Vp = bA->velocity + angLinVelA - bB->velocity - angLinVelB;
+        glm::vec3 t(0);
+        glm::vec3 tangentVel = Vp - glm::dot(Vp, data.normal) * data.normal;
+        if (glm::length2(tangentVel) > 1e-8f)
+            t = glm::normalize(tangentVel);
+        else
+            t = glm::vec3(0);
+        if(!Utilities::AlmostEqual(glm::length2(t), 0.0f))
+            t = glm::normalize(t);
+        else
+            t = glm::vec3(0);
+
+        mImpulses.push_back({data.normal, data.contactPoints[i], (size_t)-1, (size_t)-1, 0.0f, INFINITY});
+        mImpulses.push_back({t, data.contactPoints[i], (size_t)-1, (size_t)-1, -0.1f, 0.1f});
+        mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-1,  1});
         mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-1, -1});
-        mCollisions.push_back({{A, B}, data.contactPoints[i], data.normal});
+
+        mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-2,  1});
+        mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-2, -1});
+        
+        mCollisions.push_back({{A, B}, data.contactPoints[i], data.normal, -(e+1.0f) * glm::dot(Vp, data.normal)});
+        mCollisions.push_back({{A, B}, data.contactPoints[i], t, -glm::dot(Vp, t)});
     }
 }
