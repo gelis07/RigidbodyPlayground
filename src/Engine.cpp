@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include "App.h"
 #define PHYSICS_TIMESTEP 0.02f
-#define PHYSICS_ITERATIONS 10.0f
+#define PHYSICS_ITERATIONS 1.0f
 
 void Engine::Init()
 {

@@ -29,16 +29,15 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
             CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
             {
-                CollisionResolution(rigidbodies, a, b, data);
+                CollisionResolution(rigidbodies, a, b, data, dt);
             }
         }
     }
     if(mCollisions.size() > 0)
     {
-        std::vector<std::vector<float>> matrix(mCollisions.size() * 2, std::vector<float>(mCollisions.size() * 2, 0.0f));
-        std::vector<float> c(mCollisions.size() * 2);
-        impulses.resize(c.size(), 0.0f);
-
+        std::vector<std::vector<float>> matrix(mCollisions.size(), std::vector<float>(mCollisions.size(), 0.0f));
+        std::vector<float> c(mCollisions.size());
+        impulses.resize(c.size());
         for(int i = 0; i < mCollisions.size(); i++)
         {
             for(int j = 0; j < mCollisions[i].objects.size(); j++)
@@ -59,17 +58,22 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
                     glm::vec3 rp = mCollisions[i].point - rb->GetTransform().position;
                     glm::vec3 rpt(-rp.y, rp.x, 0.0f);
                     glm::vec3 impDir = mImpulses[impActData.id].dir * (float)impActData.mult;
-                    matrix[i][impActData.id] += objMult *
-                    (glm::dot(impDir, mCollisions[i].normal) * rb->GetInvMass() +
+                    matrix[i][impActData.id] += objMult * 
+                    (glm::dot(impDir, mCollisions[i].normal) * rb->GetInvMass() + 
                     glm::dot(rit, impDir) * glm::dot(rpt, mCollisions[i].normal) * rb->GetInvInertia());
                 }
             }
             c[i] = mCollisions[i].constant;
         }
 
-
-
+        
+        std::vector<float> preImpulses(impulses);
         SolveLinearSystem(&impulses, matrix, c);
+        for (size_t i = 0; i < impulses.size(); i++)
+        {
+            fmt::println("previous impulse: {}, current impulse: {}", preImpulses[i], impulses[i]);
+        }
+        fmt::println("");
         for (int i = 0; i < mColObjects.size(); i++)
         {
             for (int j = 0; j < mColObjects[i].ImpulsesActed.size(); j++)
@@ -97,7 +101,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
         return;
     }
     const size_t n = constants.size();
-    const int max_iters = 10;
+    const int max_iters = 200;
 
     for (int iter = 0; iter < max_iters; iter++) {
         for (int i = 0; i < n; i++) {
@@ -130,7 +134,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
 
 
 
-void PhysicsEngine::CollisionResolution(const std::vector<cRigidBody*>& rigidbodies, size_t A, size_t B, const CollisionData& data)
+void PhysicsEngine::CollisionResolution(const std::vector<cRigidBody*>& rigidbodies, size_t A, size_t B, const CollisionData& data, float dt)
 {
     for (int i =0; i < data.contactPoints.size(); i++)
     {
@@ -149,20 +153,25 @@ void PhysicsEngine::CollisionResolution(const std::vector<cRigidBody*>& rigidbod
             t = glm::normalize(tangentVel);
         else
             t = glm::vec3(0);
-        if(!Utilities::AlmostEqual(glm::length2(t), 0.0f))
+        if(!utilities::AlmostEqual(glm::length2(t), 0.0f))
             t = glm::normalize(t);
         else
             t = glm::vec3(0);
 
         mImpulses.push_back({data.normal, data.contactPoints[i], (size_t)-1, (size_t)-1, 0.0f, INFINITY});
-        mImpulses.push_back({t, data.contactPoints[i], (size_t)-1, (size_t)-1, -0.1f, 0.1f});
+        mImpulses.push_back({t, data.contactPoints[i], (size_t)-1, (size_t)-1, -0.6f, 0.6f});
         mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-1,  1});
         mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-1, -1});
 
         mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-2,  1});
         mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-2, -1});
-        
+        const float baumgarte = 0.2f;
+        const float penetrationSlop = 0.01f;
+        float penError = glm::max(0.0f, data.displacement - penetrationSlop);
+        float posBias = (baumgarte / dt) * penError;
         mCollisions.push_back({{A, B}, data.contactPoints[i], data.normal, -(e+1.0f) * glm::dot(Vp, data.normal)});
         mCollisions.push_back({{A, B}, data.contactPoints[i], t, -glm::dot(Vp, t)});
+
+
     }
 }

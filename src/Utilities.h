@@ -50,7 +50,7 @@ struct Transform
 };
 
 
-namespace Utilities
+namespace utilities
 {
 
     inline float RoundToDecimal(float value, int place)
@@ -59,9 +59,9 @@ namespace Utilities
     }
     inline glm::vec3 RoundToDecimal(glm::vec3 value, int place)
     {
-        float x = glm::ceil(value.x * glm::pow(10, place)) / glm::pow(10, place);
-        float y = glm::ceil(value.y * glm::pow(10, place)) / glm::pow(10, place);
-        float z = glm::ceil(value.z * glm::pow(10, place)) / glm::pow(10, place);
+        float x = glm::round(value.x * glm::pow(10, place)) / glm::pow(10, place);
+        float y = glm::round(value.y * glm::pow(10, place)) / glm::pow(10, place);
+        float z = glm::round(value.z * glm::pow(10, place)) / glm::pow(10, place);
         return glm::vec3(x,y,z);
     }
     // inline glm::vec3 Clamp(glm::vec3 value, glm::vec3 min, glm::vec3 max)
@@ -93,10 +93,22 @@ namespace Utilities
     {
         return glm::abs(a-b) < 0.00001f;
     }
-
+    inline float cross2(const glm::vec3& a, const glm::vec3& b)
+    {
+        return a.x * b.y - a.y * b.x;
+    }
+    
     inline void print(const glm::vec3& vec)
     {
         fmt::print("{} , {}, {}\n", vec.x, vec.y, vec.z);
+    }
+    inline glm::vec3 normalize(const glm::vec3& vec)
+    {
+        glm::vec3 nVec = RoundToDecimal(vec, 3);
+        // fmt::print("rounded vector: ");
+        // Utilities::print(nVec);
+        nVec /= glm::length(nVec);
+        return nVec;
     }
     inline std::string LoadFileAsString(const std::string& aFileName)
     {
