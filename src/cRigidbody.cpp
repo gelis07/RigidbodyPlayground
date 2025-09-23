@@ -120,7 +120,7 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
 
         glm::vec3 edge = p1 - p2;
         glm::vec3 normal(-edge.y, edge.x, 0.0f);
-        axes.push_back(glm::normalize(normal));
+        axes.push_back(normal);
     }
     for (int i = 0; i < verticesB.size(); i++) 
     {
@@ -129,13 +129,16 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
 
         glm::vec3 edge = p1 - p2;
         glm::vec3 normal(-edge.y, edge.x, 0.0f);
-        axes.push_back(glm::normalize(normal));
+        axes.push_back(normal);
     }
     float MinOverlap = INFINITY;
     glm::vec3 smallestAxis;
+    int s = 0;
     for (int i = 0; i < axes.size(); i++)
     {
-        glm::vec3 axis = axes[i];
+        // fmt::print("before rounding vector:");
+        // Utilities::print(axes[i]);
+        glm::vec3 axis = glm::normalize(axes[i]);
         glm::vec2 p1 = ProjectShape(axis, verticesA);
         glm::vec2 p2 = ProjectShape(axis, verticesB);
         if(!(p1.y >= p2.x && p2.y >= p1.x))
@@ -153,7 +156,7 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
             }
         }
     }
-    glm::vec3 normal = glm::normalize(smallestAxis);
+    glm::vec3 normal = smallestAxis;
     glm::vec3 displacement = -normal * MinOverlap;
     bool flipObj = false;
     if(glm::dot(obj->GetTransform().position - GetTransform().position, normal) < 0)

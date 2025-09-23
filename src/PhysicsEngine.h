@@ -46,7 +46,7 @@ class PhysicsEngine
         void Init();
         void Update(const std::vector<cRigidBody*>& rigidbodies, float time);
         void DebugUI();
-        void CollisionResolution(const std::vector<cRigidBody*>& rigidbodies,size_t A, size_t B, const CollisionData& data);
+        void CollisionResolution(const std::vector<cRigidBody*>& rigidbodies,size_t A, size_t B, const CollisionData& data, float dt);
         void SolveLinearSystem(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
         void SolveLinearSystemF(std::vector<float>* output, const std::vector<std::vector<float>>& matrix

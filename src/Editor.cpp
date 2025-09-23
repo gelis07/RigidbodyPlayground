@@ -38,23 +38,40 @@ void Editor::Update()
 
     ImGui::End();
     Hierachy();
+    SceneManagement();
+
 
     ImGui::Begin("Inspector");
-    ImGui::Text("Transform");
-    Entity& selectedEntity = scene.entities[SelectedEntity]; 
-    ImGui::DragFloat3("position", glm::value_ptr(selectedEntity.GetTransformPointer()->position));
-    ImGui::DragFloat3("rotation", glm::value_ptr(selectedEntity.GetTransformPointer()->rotation), 0.01f);
-    ImGui::DragFloat3("scale", glm::value_ptr(selectedEntity.GetTransformPointer()->scale));
-    for (Component* component : selectedEntity.mComponents)
+    if(SelectedEntity != -1)
     {
-        ImGui::Text("%s", component->name.c_str());
-        for (InspectorVarData varData : component->InspectorVariables)
+        ImGui::Text("Transform");
+        Entity& selectedEntity = scene.entities[SelectedEntity]; 
+        ImGui::DragFloat3("position", glm::value_ptr(selectedEntity.GetTransformPointer()->position));
+        ImGui::DragFloat3("rotation", glm::value_ptr(selectedEntity.GetTransformPointer()->rotation), 0.01f);
+        ImGui::DragFloat3("scale", glm::value_ptr(selectedEntity.GetTransformPointer()->scale));
+        for (Component* component : selectedEntity.mComponents)
         {
-            RenderVariable(varData);
+            ImGui::Text("%s", component->name.c_str());
+            for (InspectorVarData varData : component->InspectorVariables)
+            {
+                RenderVariable(varData);
+            }
         }
     }
     ImGui::End();
 }
+
+void Editor::Timers()
+{
+    ImGui::Begin("Timers");
+
+    for (const auto& [key, value] : Timings::GetTimings()) {
+        ImGui::Text("%s: %.4f ms", key.c_str(), value);
+    }
+
+    ImGui::End();
+}
+
 void Editor::Hierachy()
 {
     ImGui::Begin("Hiearachy");
@@ -81,7 +98,7 @@ void Editor::Hierachy()
         obj1.SetTransform({glm::vec3(0, 0, 0.0f), glm::vec3(0), glm::vec3(100.0f)});
         cRigidBody* objRigid1 = obj1.AddComponent<cRigidBody>();
         cRenderer* objRend1 = obj1.AddComponent<cRenderer>();
-        objRend1->color = glm::vec4(Utilities::RandomFloat(), Utilities::RandomFloat(), Utilities::RandomFloat(), 1.0f);
+        objRend1->color = glm::vec4(utilities::RandomFloat(), utilities::RandomFloat(), utilities::RandomFloat(), 1.0f);
         objRend1->AddVertices(vertices);
         objRend1->AddIndices(indices);
 
@@ -126,7 +143,34 @@ void Editor::RenderVariable(InspectorVarData& data)
     }
 }
 
-
+void Editor::SceneManagement()
+{
+    ImGui::Begin("Scenes");
+    ImGui::InputText("Save Scene Path", &SaveScenePath);
+    if (ImGui::Button("save"))
+    {
+        scene.Save(SaveScenePath);
+    }
+    ImGui::InputText("Load Scene Path", &LoadScenePath);
+    if(ImGui::Button("Load"))
+    {
+        std::ifstream f(LoadScenePath);
+        if(f.good())
+        {
+            scene.Load(LoadScenePath);
+            SelectedEntity = -1;
+        }
+        else
+            fmt::println("Cant open file");
+    }
+    if(ImGui::Button("Delete"))
+    {
+        scene.Delete();
+        scene.entities.reserve(100);
+        SelectedEntity = -1;
+    }
+    ImGui::End();
+}
 void Editor::Dockspace()
 {
     ImGuiViewport* viewport = ImGui::GetMainViewport();

@@ -9,7 +9,7 @@ Shader::Shader()
 Shader* Shader::AttachShader(int ShaderType, std::string aFileName)
 {
     GLuint shader = glCreateShader(ShaderType);
-    std::string shaderSourceStr = Utilities::LoadFileAsString(aFileName);
+    std::string shaderSourceStr = utilities::LoadFileAsString(aFileName);
     const char* shaderSource = shaderSourceStr.c_str();
     glShaderSource(shader, 1, &shaderSource, NULL);
     glCompileShader(shader);

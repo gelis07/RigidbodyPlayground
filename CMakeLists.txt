@@ -8,6 +8,7 @@ include_directories(C:/sdk/ImGuiDocking/backends/)
 include_directories(C:/sdk/ImGuiDocking/)
 include_directories(C:/sdk/GLM)
 include_directories(C:/sdk/fmt/include/fmt)
+include_directories(C:/sdk/nlhjson/single_include/nlohmann)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
@@ -23,6 +24,7 @@ src/cRigidbody.cpp
 src/PhysicsEngine.cpp
 src/Entity.cpp
 src/Engine.cpp
+src/Scene.cpp
 src/Component.cpp
 src/Camera.cpp
 C:/sdk/glad/src/glad.c
@@ -32,6 +34,7 @@ C:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp
 C:/sdk/ImGuiDocking/imgui_tables.cpp
 C:/sdk/ImGuiDocking/imgui_widgets.cpp
 C:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp
+C:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
 )
 
 target_link_libraries(PhysicsEngine PRIVATE libglfw3.a)
