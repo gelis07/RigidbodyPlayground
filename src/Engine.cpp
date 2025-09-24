@@ -38,6 +38,7 @@ void Engine::Run(Scene* scene,bool paused, float time)
         }
     }else
     {
+        Timings::StartTimer("Whole Engine");
         accumalator += deltaTime;
         while (accumalator >= PHYSICS_TIMESTEP)
         {
@@ -47,6 +48,7 @@ void Engine::Run(Scene* scene,bool paused, float time)
             }
             accumalator -= PHYSICS_TIMESTEP;
         }
+        Timings::EndTimer();
     }
     if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_SPACE))
         paused = !paused;

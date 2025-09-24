@@ -75,11 +75,11 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         std::vector<float> preImpulses(impulses);
         SolveLinearSystem(&impulses, matrix, c);
         Timings::EndTimer();
-        for (size_t i = 0; i < impulses.size(); i++)
-        {
-            fmt::println("previous impulse: {}, current impulse: {}", preImpulses[i], impulses[i]);
-        }
-        fmt::println("");
+        // for (size_t i = 0; i < impulses.size(); i++)
+        // {
+            // fmt::println("previous impulse: {}, current impulse: {}", preImpulses[i], impulses[i]);
+        // }
+        // fmt::println("");
         for (int i = 0; i < mColObjects.size(); i++)
         {
             for (int j = 0; j < mColObjects[i].ImpulsesActed.size(); j++)
@@ -107,7 +107,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
         return;
     }
     const size_t n = constants.size();
-    const int max_iters = 200;
+    const int max_iters = 15;
 
     for (int iter = 0; iter < max_iters; iter++) {
         for (int i = 0; i < n; i++) {
@@ -165,16 +165,13 @@ void PhysicsEngine::CollisionResolution(const std::vector<cRigidBody*>& rigidbod
             t = glm::vec3(0);
 
         mImpulses.push_back({data.normal, data.contactPoints[i], (size_t)-1, (size_t)-1, 0.0f, INFINITY});
-        mImpulses.push_back({t, data.contactPoints[i], (size_t)-1, (size_t)-1, -0.6f, 0.6f});
+        mImpulses.push_back({t, data.contactPoints[i], (size_t)mImpulses.size()-1, (size_t)mImpulses.size()-1, -0.6f, 0.6f});
+        
         mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-1,  1});
         mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-1, -1});
 
         mColObjects[A].ImpulsesActed.push_back({mImpulses.size()-2,  1});
         mColObjects[B].ImpulsesActed.push_back({mImpulses.size()-2, -1});
-        const float baumgarte = 0.2f;
-        const float penetrationSlop = 0.01f;
-        float penError = glm::max(0.0f, data.displacement - penetrationSlop);
-        float posBias = (baumgarte / dt) * penError;
         mCollisions.push_back({{A, B}, data.contactPoints[i], data.normal, -(e+1.0f) * glm::dot(Vp, data.normal)});
         mCollisions.push_back({{A, B}, data.contactPoints[i], t, -glm::dot(Vp, t)});
 
