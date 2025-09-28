@@ -4,8 +4,6 @@ p =
     JumpVel = 200
 }
 
-bubu = 5
-
 function Update()
     if Input("LEFT") then
         SetVelocity(-p.MoveStep, VelocityY())

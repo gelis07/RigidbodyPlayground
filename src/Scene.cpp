@@ -93,10 +93,10 @@ void Scene::Load(const std::string& path)
         scale.z = data[i]["transform"]["scale"]["z"];
 
         entities.push_back({});
-        Entity& obj1 = entities[entities.size()-1];
-        obj1.SetTransform({position, rotation, scale});
-        cRigidBody* objRigid1 = obj1.AddComponent<cRigidBody>();
-        cRenderer* objRend1 = obj1.AddComponent<cRenderer>();
+        Entity& entity = entities[entities.size()-1];
+        entity.SetTransform({position, rotation, scale});
+        cRigidBody* objRigid1 = entity.AddComponent<cRigidBody>();
+        cRenderer* objRend1 = entity.AddComponent<cRenderer>();
         // objRend1->color = glm::vec4(Utilities::RandomFloat(), Utilities::RandomFloat(), Utilities::RandomFloat(), 1.0f);
         objRend1->AddVertices(vertices);
         objRend1->AddIndices(indices);
@@ -104,9 +104,9 @@ void Scene::Load(const std::string& path)
         objRigid1->SetVertices(SquareVertices);
         objRigid1->Init();
         
-        for(int c = 0; c < obj1.mComponents.size(); c++)
+        for(int c = 0; c < entity.mComponents.size(); c++)
         {
-            Component* comp = obj1.mComponents[c];
+            Component* comp = entity.mComponents[c];
             json component = data[i][comp->name];
             for(int v = 0; v < comp->InspectorVariables.size(); v++)
             {
@@ -114,6 +114,19 @@ void Scene::Load(const std::string& path)
             }
         }
 
+        for (auto& [name, value] : data[i].items()) 
+        {
+            if(name == objRend1->name || name == objRigid1->name || name == "transform")
+                continue;
+
+            json component = value;
+            Component* comp = entity.AddComponent<LuaComponent>(name);
+            for(int v = 0; v < comp->InspectorVariables.size(); v++)
+            {
+                comp->InspectorVariables[v].Load(component);
+            }
+            entity.mLuaComponents.push_back((LuaComponent*)entity.mComponents.back());
+        }
         renderers.push_back(objRend1);
         rbs.push_back(objRigid1);
     }

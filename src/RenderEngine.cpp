@@ -16,12 +16,12 @@ void RenderEngine::Init()
     Shader normalShader;
     Shader CircleShader;
     normalShader
-    .AttachShader(GL_VERTEX_SHADER, "Basic.vs")
-    ->AttachShader(GL_FRAGMENT_SHADER, "Basic.fs")
+    .AttachShader(GL_VERTEX_SHADER, "Shaders/Basic.vs")
+    ->AttachShader(GL_FRAGMENT_SHADER, "Shaders/Basic.fs")
     ->Init();
     CircleShader
-    .AttachShader(GL_VERTEX_SHADER, "Basic.vs")
-    ->AttachShader(GL_FRAGMENT_SHADER, "CircleShader.fs")
+    .AttachShader(GL_VERTEX_SHADER, "Shaders/Basic.vs")
+    ->AttachShader(GL_FRAGMENT_SHADER, "Shaders/CircleShader.fs")
     ->Init();
     
     mShaders[NORMAL] = normalShader;

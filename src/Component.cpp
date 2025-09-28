@@ -198,9 +198,61 @@ void InspectorVarData::RenderLua()
             break;
     }
 }
+void InspectorVarData::SaveLuavVar(json& jsonData)
+{
+    sol::object obj = (*LuaState)["p"][name];
+    switch (obj.get_type())
+    {
+        case sol::type::nil:
+            fmt::println("Can't save nill variable");
+            break;
+        case sol::type::number:
+        {
+            jsonData[name] = obj.as<float>();
+            break;
+        }
+        case sol::type::boolean:
+        {
+            jsonData[name] = obj.as<bool>();
+            break;
+        }
+        default:
+            fmt::println("What is that type of variable?");
+            break;
+    }
+}
+void InspectorVarData::LoadLuaVar(json& jsonData)
+{
+    sol::object obj = (*LuaState)["p"][name];
+    switch (obj.get_type())
+    {
+        case sol::type::nil:
+            fmt::println("Can't load nill variable");
+            break;
+        case sol::type::number:
+        {
+            (*LuaState)["p"][name] = jsonData[name].get<float>();
+            break;
+        }
+        case sol::type::boolean:
+        {
+            (*LuaState)["p"][name] = jsonData[name].get<bool>();
+            break;
+        }
+        default:
+            fmt::println("What is that type of variable?");
+            break;
+    }
+}
+
 
 void InspectorVarData::Save(json& jsonData)
 {
+    if(LuaState != nullptr)
+    {
+        SaveLuavVar(jsonData);
+        return;
+    }
     switch (type)
     {
         case BOOL:
@@ -238,6 +290,11 @@ void InspectorVarData::Save(json& jsonData)
 }
 void InspectorVarData::Load(json& jsonData)
 {
+    if(LuaState != nullptr)
+    {
+        LoadLuaVar(jsonData);
+        return;
+    }
     switch (type)
     {
         case BOOL:
@@ -274,32 +331,6 @@ void InspectorVarData::Load(json& jsonData)
     }
 }
 
-void InspectorVarData::LoadLuaVar(const sol::state& state, const std::string& name)
-{
-    if(LuaState == nullptr)
-    {
-        fmt::println("its not a lua variable");
-        return;
-    }
-    sol::object obj = state[name];
-    switch (obj.get_type())
-    {
-        case sol::type::nil:
-            fmt::println("Can't load nill variable");
-            break;
-        case sol::type::number:
-            // luaVar = obj.as<float>();
-            type = FLOAT;
-            break;
-        case sol::type::boolean:
-            // luaVar = obj.as<bool>();
-            type = BOOL;
-            break;
-        default:
-            fmt::println("What is that type of variable?");
-            break;
-    }
-}
 
 LuaComponent::LuaComponent(Entity* entity, const std::string& path) : Component(entity)
 {
