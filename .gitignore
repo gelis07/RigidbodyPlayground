@@ -41,7 +41,6 @@
 *.dwo
 *.idx
 
-build/
 .clangd
 .cache/
 CMakeLists.txt

@@ -17,6 +17,7 @@
 #include <bits/stdc++.h>
 #include <cmath>
 #include <limits.h>
+
 #define PI 3.141592
 
 #define WIDTH 1280.0f

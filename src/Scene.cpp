@@ -3,80 +3,6 @@
 #include <fstream>
 
 
-void Scene::SaveVariable(json& data, InspectorVarData& var)
-{
-   switch (var.type)
-    {
-        case BOOL:
-        {
-            data[var.name] = *(bool*)(var.data);
-            break;
-        }
-        case FLOAT:
-        {
-            data[var.name] = *(float*)(var.data);
-            break;
-        }
-        case VEC2:
-        {
-            data[var.name]["x"] = (*(glm::vec2*)(var.data)).x;
-            data[var.name]["y"] = (*(glm::vec2*)(var.data)).y;
-            break;
-        }
-        case VEC3:
-        {
-            data[var.name]["x"] = (*(glm::vec3*)(var.data)).x;
-            data[var.name]["y"] = (*(glm::vec3*)(var.data)).y;
-            data[var.name]["z"] = (*(glm::vec3*)(var.data)).z;
-            break;
-        }
-        case VEC4:
-        {
-            data[var.name]["x"] = (*(glm::vec4*)(var.data)).x;
-            data[var.name]["y"] = (*(glm::vec4*)(var.data)).y;
-            data[var.name]["z"] = (*(glm::vec4*)(var.data)).z;
-            data[var.name]["w"] = (*(glm::vec4*)(var.data)).w;
-            break;
-        }
-    }
-}
-void Scene::LoadVariable(json& data, InspectorVarData& var)
-{
-   switch (var.type)
-    {
-        case BOOL:
-        {
-            *(bool*)(var.data) = data[var.name];
-            break;
-        }
-        case FLOAT:
-        {
-            *(float*)(var.data) = data[var.name];
-            break;
-        }
-        case VEC2:
-        {
-            (*(glm::vec2*)(var.data)).x = data[var.name]["x"];
-            (*(glm::vec2*)(var.data)).y = data[var.name]["y"];
-            break;
-        }
-        case VEC3:
-        {
-            (*(glm::vec3*)(var.data)).x = data[var.name]["x"];
-            (*(glm::vec3*)(var.data)).y = data[var.name]["y"];
-            (*(glm::vec3*)(var.data)).z = data[var.name]["z"];
-            break;
-        }
-        case VEC4:
-        {
-            (*(glm::vec4*)(var.data)).x = data[var.name]["x"];
-            (*(glm::vec4*)(var.data)).y = data[var.name]["y"];
-            (*(glm::vec4*)(var.data)).z = data[var.name]["z"];
-            (*(glm::vec4*)(var.data)).w = data[var.name]["w"];
-            break;
-        }
-    }
-}
 
 void Scene::Save(const std::string& path)
 {
@@ -111,7 +37,7 @@ void Scene::Save(const std::string& path)
             Component* comp = entities[i].mComponents[j];
             for(int v = 0; v < comp->InspectorVariables.size(); v++)
             {
-                SaveVariable(component, comp->InspectorVariables[v]);
+                comp->InspectorVariables[v].Save(component);
             }
             object[comp->name] = component;
         }
@@ -184,7 +110,7 @@ void Scene::Load(const std::string& path)
             json component = data[i][comp->name];
             for(int v = 0; v < comp->InspectorVariables.size(); v++)
             {
-                LoadVariable(component, comp->InspectorVariables[v]);
+                comp->InspectorVariables[v].Load(component);
             }
         }
 

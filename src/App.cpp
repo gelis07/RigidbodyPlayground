@@ -27,6 +27,8 @@ void App::Init()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
+    ImFont* font = io.Fonts->AddFontFromFileTTF("Lato-Regular.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesDefault()); 
+    io.FontDefault = font;
     ImGui_ImplGlfw_InitForOpenGL(mWindow,true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGui::StyleColorsDark();

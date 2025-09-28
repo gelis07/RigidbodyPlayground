@@ -3,6 +3,7 @@
 
 
 class Component;
+class LuaComponent;
 
 class Entity
 {
@@ -13,7 +14,7 @@ class Entity
         Transform* GetTransformPointer() {return &mTransform;}
         void SetTransform(const Transform& aTrans) {mTransform = aTrans;} 
         std::vector<Component*> mComponents;
-
+        std::vector<LuaComponent*> mLuaComponents;
         template <typename T> T* GetComponent()
         {
             for (auto& c : mComponents) {

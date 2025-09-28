@@ -52,10 +52,10 @@ void Engine::Run(Scene* scene,bool paused, float time)
     }
     if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_SPACE))
         paused = !paused;
-    // for (int i = 0; i < scene->entities.size(); i++)
-    // {
-    //     Entity& entity = scene->entities[i];
-    //     entity.Update();
-    // }
+    for (int i = 0; i < scene->entities.size(); i++)
+    {
+        Entity& entity = scene->entities[i];
+        entity.Update();
+    }
     mRenderEngine.Update(scene->renderers, mProjection, time);
 }

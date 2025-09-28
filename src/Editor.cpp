@@ -54,8 +54,14 @@ void Editor::Update()
             ImGui::Text("%s", component->name.c_str());
             for (InspectorVarData varData : component->InspectorVariables)
             {
-                RenderVariable(varData);
+                varData.Render();
             }
+        }
+        ImGui::InputText("something", &CompToAdd);
+        if(ImGui::Button("Add Component"))
+        {
+            selectedEntity.AddComponent<LuaComponent>(CompToAdd);
+            selectedEntity.mLuaComponents.push_back((LuaComponent*)selectedEntity.mComponents.back());
         }
     }
     ImGui::End();
@@ -109,38 +115,6 @@ void Editor::Hierachy()
         scene.rbs.push_back(objRigid1);
     }
     ImGui::End();
-}
-
-void Editor::RenderVariable(InspectorVarData& data)
-{
-    switch (data.type)
-    {
-        case BOOL:
-        {
-            ImGui::Checkbox(data.name.c_str(), reinterpret_cast<bool*>(data.data));
-            break;
-        }
-        case FLOAT:
-        {
-            ImGui::DragFloat(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
-            break;
-        }
-        case VEC2:
-        {
-            ImGui::DragFloat2(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
-            break;
-        }
-        case VEC3:
-        {
-            ImGui::DragFloat3(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
-            break;
-        }
-        case VEC4:
-        {
-            ImGui::DragFloat4(data.name.c_str(), reinterpret_cast<float*>(data.data), data.speed, data.min, data.max);
-            break;
-        }
-    }
 }
 
 void Editor::SceneManagement()

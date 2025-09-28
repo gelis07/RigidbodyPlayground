@@ -21,12 +21,12 @@ class Editor
         bool paused = true;
     private:
         void Dockspace();
-        void RenderVariable(InspectorVarData& data);
         void RescaleFramebuffer(float width, float height);
         void Hierachy();
 
         std::string LoadScenePath;
         std::string SaveScenePath = "test.json";
+        std::string CompToAdd;
         void SceneManagement();
 
 

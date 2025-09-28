@@ -18,7 +18,4 @@ class Scene
         std::vector<cRenderer*> renderers;
         std::vector<cRigidBody*> rbs;
         float width, height;
-    private:
-        void SaveVariable(json& data, InspectorVarData& var);
-        void LoadVariable(json& data, InspectorVarData& var);
 };

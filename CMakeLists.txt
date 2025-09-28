@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 project(PhysicsEngine)
 
 
-include_directories(C:/sdk/glad/include)
-include_directories(C:/sdk/GLFW/include)
-include_directories(C:/sdk/ImGuiDocking/backends/)
-include_directories(C:/sdk/ImGuiDocking/)
-include_directories(C:/sdk/GLM)
-include_directories(C:/sdk/fmt/include/fmt)
-include_directories(C:/sdk/nlhjson/single_include/nlohmann)
+include_directories(D:/sdk/glad/include)
+include_directories(D:/sdk/GLFW/include)
+include_directories(D:/sdk/ImGuiDocking/backends/)
+include_directories(D:/sdk/ImGuiDocking/)
+include_directories(D:/sdk/GLM)
+include_directories(D:/sdk/fmt/include/fmt)
+include_directories(D:/sdk/nlhjson/single_include/nlohmann)
+include_directories(D:/sdk/Lua)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
@@ -27,14 +28,15 @@ src/Engine.cpp
 src/Scene.cpp
 src/Component.cpp
 src/Camera.cpp
-C:/sdk/glad/src/glad.c
-C:/sdk/ImGuiDocking/imgui.cpp
-C:/sdk/ImGuiDocking/imgui_draw.cpp
-C:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp
-C:/sdk/ImGuiDocking/imgui_tables.cpp
-C:/sdk/ImGuiDocking/imgui_widgets.cpp
-C:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp
-C:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
+D:/sdk/glad/src/glad.c
+D:/sdk/ImGuiDocking/imgui.cpp
+D:/sdk/ImGuiDocking/imgui_draw.cpp
+D:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp
+D:/sdk/ImGuiDocking/imgui_tables.cpp
+D:/sdk/ImGuiDocking/imgui_widgets.cpp
+D:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp
+D:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
 )
 
 target_link_libraries(PhysicsEngine PRIVATE libglfw3.a)
+target_link_libraries(PhysicsEngine PRIVATE lua54.lib)

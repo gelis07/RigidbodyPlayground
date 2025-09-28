@@ -16,6 +16,7 @@ cRigidBody::cRigidBody(Entity* entity) : Component(entity)
     InspectorVariables.push_back({"static friction", FLOAT, reinterpret_cast<void*>(&StaticFriction), 0.01f, 0.0f, 1.0f});
     InspectorVariables.push_back({"dynamic friction", FLOAT, reinterpret_cast<void*>(&DynamicFriction), 0.01f, 0.0f, 1.0f});
     name = "Rigidbody";
+
 }
 
 void cRigidBody::Init()
