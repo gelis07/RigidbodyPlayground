@@ -28,9 +28,10 @@ struct InspectorVarData
     void Render();
     void Save(json& jsonData);
     void Load(json& jsonData);
-    void LoadLuaVar(const sol::state& state, const std::string& name);
-
+    
     private:
+        void SaveLuavVar(json& jsonData);
+        void LoadLuaVar(json& jsonData);
         void RenderLua();
 };
 

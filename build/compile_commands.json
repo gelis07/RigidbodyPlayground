@@ -1,134 +1,134 @@
 [
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\main.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\main.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/main.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\main.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\main.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/main.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/main.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Shader.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Shader.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Shader.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Shader.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Shader.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Shader.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Shader.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\GLBuffer.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\GLBuffer.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/GLBuffer.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\GLBuffer.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\GLBuffer.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/GLBuffer.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/GLBuffer.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\App.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\App.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/App.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\App.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\App.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/App.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/App.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Editor.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Editor.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Editor.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Editor.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Editor.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Editor.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Editor.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\cRenderer.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\cRenderer.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/cRenderer.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\cRenderer.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\cRenderer.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/cRenderer.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/cRenderer.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\RenderEngine.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\RenderEngine.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/RenderEngine.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\RenderEngine.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\RenderEngine.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/RenderEngine.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/RenderEngine.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\cRigidbody.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\cRigidbody.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/cRigidbody.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\cRigidbody.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\cRigidbody.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/cRigidbody.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/cRigidbody.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\PhysicsEngine.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\PhysicsEngine.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/PhysicsEngine.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\PhysicsEngine.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\PhysicsEngine.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/PhysicsEngine.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/PhysicsEngine.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Entity.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Entity.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Entity.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Entity.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Entity.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Entity.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Entity.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Engine.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Engine.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Engine.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Engine.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Engine.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Engine.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Engine.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Scene.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Scene.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Scene.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Scene.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Scene.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Scene.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Scene.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Component.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Component.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Component.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Component.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Component.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Component.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Component.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Camera.cpp.obj -c \"D:\\Gelis\\OpenGL\\Physics Engine 2.0\\src\\Camera.cpp\"",
-  "file": "D:/Gelis/OpenGL/Physics Engine 2.0/src/Camera.cpp",
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\src\\Camera.cpp.obj -c C:\\Gelis\\RigidbodyPlayground\\src\\Camera.cpp",
+  "file": "C:/Gelis/RigidbodyPlayground/src/Camera.cpp",
   "output": "CMakeFiles/PhysicsEngine.dir/src/Camera.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang.exe  @CMakeFiles/PhysicsEngine.dir/includes_C.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\glad\\src\\glad.c.obj -c D:\\sdk\\glad\\src\\glad.c",
-  "file": "D:/sdk/glad/src/glad.c",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/glad/src/glad.c.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\gcc.exe  @CMakeFiles/PhysicsEngine.dir/includes_C.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\glad\\src\\glad.c.obj -c C:\\sdk\\glad\\src\\glad.c",
+  "file": "C:/sdk/glad/src/glad.c",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/glad/src/glad.c.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\imgui.cpp.obj -c D:\\sdk\\ImGuiDocking\\imgui.cpp",
-  "file": "D:/sdk/ImGuiDocking/imgui.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/imgui.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\imgui.cpp.obj -c C:\\sdk\\ImGuiDocking\\imgui.cpp",
+  "file": "C:/sdk/ImGuiDocking/imgui.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/imgui.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\imgui_draw.cpp.obj -c D:\\sdk\\ImGuiDocking\\imgui_draw.cpp",
-  "file": "D:/sdk/ImGuiDocking/imgui_draw.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/imgui_draw.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\imgui_draw.cpp.obj -c C:\\sdk\\ImGuiDocking\\imgui_draw.cpp",
+  "file": "C:/sdk/ImGuiDocking/imgui_draw.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/imgui_draw.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\backends\\imgui_impl_glfw.cpp.obj -c D:\\sdk\\ImGuiDocking\\backends\\imgui_impl_glfw.cpp",
-  "file": "D:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\backends\\imgui_impl_glfw.cpp.obj -c C:\\sdk\\ImGuiDocking\\backends\\imgui_impl_glfw.cpp",
+  "file": "C:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\imgui_tables.cpp.obj -c D:\\sdk\\ImGuiDocking\\imgui_tables.cpp",
-  "file": "D:/sdk/ImGuiDocking/imgui_tables.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/imgui_tables.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\imgui_tables.cpp.obj -c C:\\sdk\\ImGuiDocking\\imgui_tables.cpp",
+  "file": "C:/sdk/ImGuiDocking/imgui_tables.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/imgui_tables.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\imgui_widgets.cpp.obj -c D:\\sdk\\ImGuiDocking\\imgui_widgets.cpp",
-  "file": "D:/sdk/ImGuiDocking/imgui_widgets.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/imgui_widgets.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\imgui_widgets.cpp.obj -c C:\\sdk\\ImGuiDocking\\imgui_widgets.cpp",
+  "file": "C:/sdk/ImGuiDocking/imgui_widgets.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/imgui_widgets.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\backends\\imgui_impl_opengl3.cpp.obj -c D:\\sdk\\ImGuiDocking\\backends\\imgui_impl_opengl3.cpp",
-  "file": "D:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\backends\\imgui_impl_opengl3.cpp.obj -c C:\\sdk\\ImGuiDocking\\backends\\imgui_impl_opengl3.cpp",
+  "file": "C:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp.obj"
 },
 {
-  "directory": "D:/Gelis/OpenGL/Physics Engine 2.0/build",
-  "command": "D:\\msys64\\mingw64\\bin\\clang++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\D_\\sdk\\ImGuiDocking\\misc\\cpp\\imgui_stdlib.cpp.obj -c D:\\sdk\\ImGuiDocking\\misc\\cpp\\imgui_stdlib.cpp",
-  "file": "D:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp",
-  "output": "CMakeFiles/PhysicsEngine.dir/D_/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp.obj"
+  "directory": "C:/Gelis/RigidbodyPlayground/build",
+  "command": "C:\\msys64\\mingw64\\bin\\g++.exe  @CMakeFiles/PhysicsEngine.dir/includes_CXX.rsp -g -o CMakeFiles\\PhysicsEngine.dir\\C_\\sdk\\ImGuiDocking\\misc\\cpp\\imgui_stdlib.cpp.obj -c C:\\sdk\\ImGuiDocking\\misc\\cpp\\imgui_stdlib.cpp",
+  "file": "C:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp",
+  "output": "CMakeFiles/PhysicsEngine.dir/C_/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp.obj"
 }
 ]

@@ -1,5 +1,6 @@
 #include "Editor.h"
-
+#include <GLFW/glfw3.h>
+#include <filesystem>
 void Editor::Update()
 {
     Dockspace();
@@ -25,7 +26,7 @@ void Editor::Update()
     RescaleFramebuffer(windowWidth, windowHeight);
     glViewport(0,0,windowWidth, windowHeight);
     ImVec2 pos = ImGui::GetCursorScreenPos();
-
+    ViewPos = glm::vec3(pos.x, pos.y + windowHeight, 0.0f);
     ImGui::GetWindowDrawList()->AddImage(
         reinterpret_cast<void*>(textureId), 
         ImVec2(pos.x, pos.y), 
@@ -57,14 +58,34 @@ void Editor::Update()
                 varData.Render();
             }
         }
-        ImGui::InputText("something", &CompToAdd);
+        ImGui::Separator();
         if(ImGui::Button("Add Component"))
         {
-            selectedEntity.AddComponent<LuaComponent>(CompToAdd);
-            selectedEntity.mLuaComponents.push_back((LuaComponent*)selectedEntity.mComponents.back());
+            AddComponentWindow = true;
         }
     }
     ImGui::End();
+
+    if(AddComponentWindow && SelectedEntity != -1)
+    {
+        Entity& selectedEntity = scene.entities[SelectedEntity]; 
+        ImGui::Begin("Add Component");
+        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator("Scripts/"))
+        {
+            if(ImGui::Button(dirEntry.path().string().c_str()))
+            {
+                selectedEntity.AddComponent<LuaComponent>(dirEntry.path().string());
+                selectedEntity.mLuaComponents.push_back((LuaComponent*)selectedEntity.mComponents.back());
+                AddComponentWindow = false;
+            }
+        }
+        ImGui::Separator();
+        if(ImGui::Button("Never mind"))
+        {
+            AddComponentWindow = false;
+        }
+        ImGui::End();
+    }
 }
 
 void Editor::Timers()
@@ -86,7 +107,9 @@ void Editor::Hierachy()
         bool ChangedColor = false;
         if(SelectedEntity == i)
         {
-            ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(1.0f, 0.0f, 0.0f, 1.0f)));
+            glm::vec3 panelColor = glm::vec3(0.17f, 0.18f, 0.19f);
+            panelColor *= 1.8f;
+            ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ColorConvertFloat4ToU32(ImVec4(panelColor.r, panelColor.g, panelColor.b, 1.00f)));
             ChangedColor = true;
         }
         if(ImGui::Button(("Entity " + std::to_string(i)).c_str()))
@@ -125,17 +148,36 @@ void Editor::SceneManagement()
     {
         scene.Save(SaveScenePath);
     }
-    ImGui::InputText("Load Scene Path", &LoadScenePath);
     if(ImGui::Button("Load"))
     {
-        std::ifstream f(LoadScenePath);
-        if(f.good())
+        LoadSceneWindow = true;
+    }
+    if(LoadSceneWindow)
+    {
+        ImGui::Begin("Add Component");
+        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator("Scenes/"))
         {
-            scene.Load(LoadScenePath);
-            SelectedEntity = -1;
+            if(ImGui::Button(dirEntry.path().string().c_str()))
+            {
+                std::string path = dirEntry.path().string();
+                std::ifstream f(path);
+                if(f.good())
+                {
+                    scene.Load(path);
+                    SelectedEntity = -1;
+                }
+                else
+                    fmt::println("Cant open file");
+
+                LoadSceneWindow = false;
+            }
         }
-        else
-            fmt::println("Cant open file");
+        ImGui::Separator();
+        if(ImGui::Button("Never mind"))
+        {
+            LoadSceneWindow = false;
+        }
+        ImGui::End();
     }
     if(ImGui::Button("Delete"))
     {
@@ -152,24 +194,27 @@ void Editor::Dockspace()
     ImGui::SetNextWindowSize(viewport->WorkSize);
     ImGui::SetNextWindowViewport(viewport->ID);
 
-    // Window flags for the dockspace host
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | 
-                                    ImGuiWindowFlags_NoTitleBar | 
-                                    ImGuiWindowFlags_NoCollapse | 
-                                    ImGuiWindowFlags_NoResize | 
-                                    ImGuiWindowFlags_NoMove | 
-                                    ImGuiWindowFlags_NoBringToFrontOnFocus | 
-                                    ImGuiWindowFlags_NoNavFocus | 
-                                    ImGuiWindowFlags_NoBackground;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |
+                                    ImGuiWindowFlags_NoTitleBar |
+                                    ImGuiWindowFlags_NoCollapse |
+                                    ImGuiWindowFlags_NoResize |
+                                    ImGuiWindowFlags_NoMove |
+                                    ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                    ImGuiWindowFlags_NoNavFocus;
 
+    // Important: only PassthruCentralNode lets the clear color show through
+    ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode; 
+
+    // Push ONLY for the DockSpace host
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-    ImGui::PopStyleVar(2);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-    // Dockspace
+    ImGui::Begin("DockSpace", nullptr, window_flags);
+    ImGui::PopStyleVar(3); // pop only here
+
+    // Dockspace node
     ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode; 
     ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
     ImGui::End();

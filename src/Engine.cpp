@@ -1,8 +1,6 @@
 #include "Engine.h"
 #include "imgui.h"
 #include "App.h"
-#define PHYSICS_TIMESTEP 0.02f
-#define PHYSICS_ITERATIONS 5.0f
 
 void Engine::Init()
 {
@@ -17,10 +15,18 @@ bool GetKeyDown(GLFWwindow* window, int key) {
     prevKeys[key] = isPressed; // store for next frame
     return isPressed && !wasPressed;
 }
+std::unordered_map<int, bool> mouseKeyPrev;
+bool GetClickDown(GLFWwindow* window, int key) {
+    bool isPressed = glfwGetMouseButton(window, key) == GLFW_PRESS;
+    bool wasPressed = mouseKeyPrev[key];
+    mouseKeyPrev[key] = isPressed; // store for next frame
+    return isPressed && !wasPressed;
+}
 
 void Engine::Run(Scene* scene,bool paused, float time)
 {
-
+    ImVec2 p = ImGui::GetWindowPos();
+    glm::vec3 pos(p.x, p.y, 0.0f);
     mProjection = glm::ortho(0.0f, scene->width, 0.0f, scene->height, -1.0f, 1.0f);
 
     float currentTime = glfwGetTime();
@@ -31,22 +37,42 @@ void Engine::Run(Scene* scene,bool paused, float time)
     {
         if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_RIGHT))
         {
-            for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
+            for (int iter = 0; iter < mPhysicsEngine.PhysicsEngineIterations; iter++) 
             {
-                mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
+                mPhysicsEngine.Update(scene->rbs, deltaTime / mPhysicsEngine.PhysicsEngineIterations);
             }
         }
     }else
     {
         Timings::StartTimer("Whole Engine");
-        accumalator += deltaTime;
-        while (accumalator >= PHYSICS_TIMESTEP)
+        if (GetClickDown(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT))
         {
-            for (int iter = 0; iter < PHYSICS_ITERATIONS; iter++) 
+            double xpos, ypos;
+            glfwGetCursorPos(glfwGetCurrentContext(), &xpos, &ypos);
+            glm::vec3 CursorPos(xpos, ypos, 0.0f);
+            glm::vec3 final((CursorPos-ViewPos).x, -(CursorPos-ViewPos).y , 0.0f);
+            if(final.x > 0 && final.y > 0)
             {
-                mPhysicsEngine.Update(scene->rbs, PHYSICS_TIMESTEP / PHYSICS_ITERATIONS);
+                scene->entities.push_back({});
+                Entity& obj1 = scene->entities[scene->entities.size()-1];
+                obj1.SetTransform({final, glm::vec3(0), glm::vec3(50.0f)});
+                cRigidBody* objRigid1 = obj1.AddComponent<cRigidBody>();
+                cRenderer* objRend1 = obj1.AddComponent<cRenderer>();
+                objRend1->color = glm::vec4(utilities::RandomFloat(), utilities::RandomFloat(), utilities::RandomFloat(), 1.0f);
+                objRend1->AddVertices(vertices);
+                objRend1->AddIndices(indices);
+
+                objRigid1->SetVertices(SquareVertices);
+                objRigid1->Init();
+
+                scene->renderers.push_back(objRend1);
+                scene->rbs.push_back(objRigid1);
             }
-            accumalator -= PHYSICS_TIMESTEP;
+        }
+
+        for (int iter = 0; iter < mPhysicsEngine.PhysicsEngineIterations; iter++) 
+        {
+            mPhysicsEngine.Update(scene->rbs, deltaTime / mPhysicsEngine.PhysicsEngineIterations);
         }
         Timings::EndTimer();
     }

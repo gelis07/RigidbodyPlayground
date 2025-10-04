@@ -19,17 +19,17 @@ class Editor
         Scene scene;
         Scene SavedScene;
         bool paused = true;
+        glm::vec3 ViewPos;
     private:
         void Dockspace();
         void RescaleFramebuffer(float width, float height);
         void Hierachy();
 
-        std::string LoadScenePath;
         std::string SaveScenePath = "test.json";
-        std::string CompToAdd;
         void SceneManagement();
 
-
+        bool AddComponentWindow = false;
+        bool LoadSceneWindow = false;
         GLuint rbo;
         GLuint textureId;
         int SelectedEntity;

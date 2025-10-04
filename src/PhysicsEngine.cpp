@@ -11,8 +11,24 @@ void PhysicsEngine::DebugUI()
 {
     ImGui::Begin("Physics Settings");
     ImGui::Checkbox("Enable Friction", &enableFriction);
+    ImGui::InputInt("Physics Engine Iterations", &PhysicsEngineIterations);
+    ImGui::InputInt("Gauss-Seidel Solver Iterations", &GaussSeidelIterations);
     ImGui::End();
 }
+
+
+bool PhysicsEngine::IntersectingAABB(AABB a, AABB b)
+{
+    if(a.max.x <= b.min.x || b.max.x <= a.min.x
+    || a.max.y <= b.min.y || b.max.y <= a.min.y)
+    {
+
+        return false;
+    }
+
+    return true;
+}
+
 float e = 0.0f;
 void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt)
 {
@@ -24,10 +40,16 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
     Timings::StartTimer("Collision Detection");
     for(int a = 0; a < rigidbodies.size(); a++)
     {
+        AABB ABox = rigidbodies[a]->GetAABB();
         //b=a+1 because that way it doesn't check already checked collisions (and with itself).
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
+            AABB BBox = rigidbodies[b]->GetAABB();
+            if(!IntersectingAABB(ABox, BBox))
+            {
+                continue;
+            }
             CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
             {
@@ -107,9 +129,8 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
         return;
     }
     const size_t n = constants.size();
-    const int max_iters = 15;
 
-    for (int iter = 0; iter < max_iters; iter++) {
+    for (int iter = 0; iter < GaussSeidelIterations; iter++) {
         for (int i = 0; i < n; i++) {
             double sum = 0.0;
             for (int j = 0; j < n; j++) {

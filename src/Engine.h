@@ -12,6 +12,7 @@ class Engine
         void Run(Scene* scene, bool paused,float time);
         RenderEngine mRenderEngine;
         PhysicsEngine mPhysicsEngine;
+        glm::vec3 ViewPos;
     private:
         Entity CircleIndicator;
         glm::mat4 mProjection = glm::mat4(1.0f);

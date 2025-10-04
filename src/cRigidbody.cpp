@@ -16,7 +16,25 @@ cRigidBody::cRigidBody(Entity* entity) : Component(entity)
     InspectorVariables.push_back({"static friction", FLOAT, reinterpret_cast<void*>(&StaticFriction), 0.01f, 0.0f, 1.0f});
     InspectorVariables.push_back({"dynamic friction", FLOAT, reinterpret_cast<void*>(&DynamicFriction), 0.01f, 0.0f, 1.0f});
     name = "Rigidbody";
+}
 
+
+AABB cRigidBody::GetAABB()
+{
+    std::vector<glm::vec3> vertices = GetWorldCoordinates();
+    AABB aabb;
+    float minX, minY;
+    float maxX, maxY;
+    for (int i = 0; i < vertices.size(); i++)
+    {
+        glm::vec3 v = vertices[i];
+
+        if (v.x < minX) { minX = v.x; }
+        if (v.x > maxX) { maxX = v.x; }
+        if (v.y < minY) { minY = v.y; }
+        if (v.y > maxY) { maxY = v.y; }
+    }
+    return {{minX, minY, 0.0f}, {maxX, maxY,0.0f}};
 }
 
 void cRigidBody::Init()
@@ -188,9 +206,9 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
         obj->mTransform->position += -displacement;
     }
     else{
-        mTransform->position += displacement * 0.5f;
-        obj->mTransform->position += -displacement * 0.5f;
     }
+    mTransform->position += displacement * 0.5f;
+    obj->mTransform->position += -displacement * 0.5f;
     for (glm::vec3& contactPoint : contactPoints) 
     {
         contactPoint += displacement;
