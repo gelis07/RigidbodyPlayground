@@ -15,6 +15,12 @@ struct CollisionData
 };
 
 
+struct AABB
+{
+    glm::vec3 min, max;
+};
+
+
 struct Simplex
 {
     private:
@@ -100,9 +106,10 @@ class cRigidBody : public Component
 
         glm::vec3 velocity = glm::vec3(0);
         glm::vec3 AngVelocity = glm::vec3(0);
+
+        AABB GetAABB();
     private:
         bool AlmostEqual(float a, float b);
-
         glm::vec3 ToWorldCoordinates(glm::vec3 point);
 
         bool mStatic = false;

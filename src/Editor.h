@@ -19,6 +19,7 @@ class Editor
         Scene scene;
         Scene SavedScene;
         bool paused = true;
+        glm::vec3 ViewPos;
     private:
         void Dockspace();
         void RescaleFramebuffer(float width, float height);

@@ -26,7 +26,7 @@ void Editor::Update()
     RescaleFramebuffer(windowWidth, windowHeight);
     glViewport(0,0,windowWidth, windowHeight);
     ImVec2 pos = ImGui::GetCursorScreenPos();
-
+    ViewPos = glm::vec3(pos.x, pos.y + windowHeight, 0.0f);
     ImGui::GetWindowDrawList()->AddImage(
         reinterpret_cast<void*>(textureId), 
         ImVec2(pos.x, pos.y), 

@@ -261,6 +261,8 @@ PhysicsEngine_SOURCE_DIR:STATIC=D:/Gelis/OpenGL/Physics Engine 2.0
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
+//STRINGS property for variable: CMAKE_BUILD_TYPE
+CMAKE_BUILD_TYPE-STRINGS:INTERNAL=Debug;Release;RelWithDebInfo;MinSizeRel
 //This is the directory where this CMakeCache.txt was created
 CMAKE_CACHEFILE_DIR:INTERNAL=d:/Gelis/OpenGL/Physics Engine 2.0/build
 //Major version of cmake used to create the current loaded cache
