@@ -51,9 +51,13 @@ class PhysicsEngine
         , const std::vector<float>& constants);
         void SolveLinearSystemF(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
+        bool IntersectingAABB(AABB a, AABB b);
+
+
         int PhysicsEngineIterations = 1;
         int GaussSeidelIterations = 15;
-        bool IntersectingAABB(AABB a, AABB b);
+        bool AABBCheck = true;
+        bool ClickForObjects = true;
     private:
         std::vector<float> impulses = std::vector<float>(0);
         // std::vector<float> frictionImpulses = std::vector<float>(0);
@@ -61,5 +65,4 @@ class PhysicsEngine
         std::vector<ImpulseData> mFrictionImpulses;
         std::vector<Collision> mCollisions;
         std::vector<CollisionObject> mColObjects;
-        bool enableFriction = true;
 };

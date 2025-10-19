@@ -45,7 +45,7 @@ void Engine::Run(Scene* scene,bool paused, float time)
     }else
     {
         Timings::StartTimer("Whole Engine");
-        if (GetClickDown(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT))
+        if (mPhysicsEngine.ClickForObjects && GetClickDown(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT))
         {
             double xpos, ypos;
             glfwGetCursorPos(glfwGetCurrentContext(), &xpos, &ypos);

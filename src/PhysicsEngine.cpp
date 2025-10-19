@@ -10,7 +10,8 @@ void PhysicsEngine::Init()
 void PhysicsEngine::DebugUI()
 {
     ImGui::Begin("Physics Settings");
-    ImGui::Checkbox("Enable Friction", &enableFriction);
+    ImGui::Checkbox("Enable AABB Check", &AABBCheck);
+    ImGui::Checkbox("Enable Object Spawner", &ClickForObjects);
     ImGui::InputInt("Physics Engine Iterations", &PhysicsEngineIterations);
     ImGui::InputInt("Gauss-Seidel Solver Iterations", &GaussSeidelIterations);
     ImGui::End();
@@ -45,10 +46,13 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            AABB BBox = rigidbodies[b]->GetAABB();
-            if(!IntersectingAABB(ABox, BBox))
+            if(AABBCheck)
             {
-                continue;
+                AABB BBox = rigidbodies[b]->GetAABB();
+                if(!IntersectingAABB(ABox, BBox))
+                {
+                    continue;
+                }
             }
             CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
