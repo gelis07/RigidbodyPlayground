@@ -1,1 +1,0 @@
--IC:/sdk/glad/include -IC:/sdk/GLFW/include -IC:/sdk/ImGuiDocking/backends -IC:/sdk/ImGuiDocking -IC:/sdk/GLM -IC:/sdk/fmt/include/fmt -IC:/sdk/nlhjson/single_include/nlohmann -IC:/sdk/Lua

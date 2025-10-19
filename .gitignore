@@ -44,3 +44,4 @@
 .clangd
 .cache/
 CMakeLists.txt
+build/

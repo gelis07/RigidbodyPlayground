@@ -1,3 +1,0 @@
-C:/Gelis/RigidbodyPlayground/build/CMakeFiles/PhysicsEngine.dir
-C:/Gelis/RigidbodyPlayground/build/CMakeFiles/edit_cache.dir
-C:/Gelis/RigidbodyPlayground/build/CMakeFiles/rebuild_cache.dir
