@@ -11,14 +11,14 @@ endif()
 # Optional: make choices visible in tools like cmake-gui
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
 
-include_directories(D:/sdk/glad/include)
-include_directories(D:/sdk/GLFW/include)
-include_directories(D:/sdk/ImGuiDocking/backends/)
-include_directories(D:/sdk/ImGuiDocking/)
-include_directories(D:/sdk/GLM)
-include_directories(D:/sdk/fmt/include/fmt)
-include_directories(D:/sdk/nlhjson/single_include/nlohmann)
-include_directories(D:/sdk/Lua)
+include_directories(vendor/glad/include)
+include_directories(vendor/GLFW/include)
+include_directories(vendor/ImGuiDocking/backends/)
+include_directories(vendor/ImGuiDocking/)
+include_directories(vendor/GLM)
+include_directories(vendor/fmt/include/fmt)
+include_directories(vendor/nlhjson/single_include/nlohmann)
+include_directories(vendor/Lua)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
@@ -37,14 +37,14 @@ src/Engine.cpp
 src/Scene.cpp
 src/Component.cpp
 src/Camera.cpp
-D:/sdk/glad/src/glad.c
-D:/sdk/ImGuiDocking/imgui.cpp
-D:/sdk/ImGuiDocking/imgui_draw.cpp
-D:/sdk/ImGuiDocking/backends/imgui_impl_glfw.cpp
-D:/sdk/ImGuiDocking/imgui_tables.cpp
-D:/sdk/ImGuiDocking/imgui_widgets.cpp
-D:/sdk/ImGuiDocking/backends/imgui_impl_opengl3.cpp
-D:/sdk/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
+vendor/glad/src/glad.c
+vendor/ImGuiDocking/imgui.cpp
+vendor/ImGuiDocking/imgui_draw.cpp
+vendor/ImGuiDocking/backends/imgui_impl_glfw.cpp
+vendor/ImGuiDocking/imgui_tables.cpp
+vendor/ImGuiDocking/imgui_widgets.cpp
+vendor/ImGuiDocking/backends/imgui_impl_opengl3.cpp
+vendor/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
 )
 
 target_link_libraries(PhysicsEngine PRIVATE libglfw3.a)
