@@ -19,6 +19,7 @@ include_directories(vendor/GLM)
 include_directories(vendor/fmt/include)
 include_directories(vendor/nlhjson/single_include/nlohmann)
 include_directories(vendor/Lua)
+include_directories(vendor)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 

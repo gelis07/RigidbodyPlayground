@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Utilities.h"
-
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 void App::GLFWErrorCallBack(int error, const char* description)
 {
     std::cout << description << '\n';
@@ -24,6 +25,13 @@ void App::Init()
     Log(!mWindow, "Couldn't create window or OpenGL Context");
     glfwMakeContextCurrent(mWindow);
     glfwSwapInterval(true);
+    GLFWimage icons[3];
+    icons[0].pixels = stbi_load((Stg::App::basePath + "Icons/icon16.png").c_str(),  &icons[0].width, &icons[0].height, 0, 4);
+    icons[1].pixels = stbi_load((Stg::App::basePath + "Icons/icon32.png").c_str(),  &icons[1].width, &icons[1].height, 0, 4);
+    icons[2].pixels = stbi_load((Stg::App::basePath + "Icons/icon256.png").c_str(), &icons[2].width, &icons[2].height, 0, 4);
+    glfwSetWindowIcon(mWindow, 3, icons);
+    for (int i = 0; i < 3; ++i)
+        stbi_image_free(icons[i].pixels);
 
     mEngine.Init();
 
