@@ -1,23 +1,27 @@
 #pragma once
+
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <glm.hpp>
 #include <memory>
 #include <vector>
 #include <unordered_map>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
 #include <unordered_set>
-#define GLM_ENABLE_EXPERIMENTAL
-#define FMT_HEADER_ONLY
-#include <core.h>
-#include <gtx/norm.hpp>
-#include <bits/stdc++.h>
 #include <cmath>
-#include <limits.h>
+#include <climits>  // prefer <climits> over <limits.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/norm.hpp>
+#ifndef FMT_HEADER_ONLY
+#define FMT_HEADER_ONLY
+#endif
+#define FMT_USE_LOCALE 0
+#include <fmt/core.h>
+#include <fmt/format.h>
 #define PI 3.141592
 
 #define WIDTH 1280.0f

@@ -16,7 +16,7 @@ include_directories(vendor/GLFW/include)
 include_directories(vendor/ImGuiDocking/backends/)
 include_directories(vendor/ImGuiDocking/)
 include_directories(vendor/GLM)
-include_directories(vendor/fmt/include/fmt)
+include_directories(vendor/fmt/include)
 include_directories(vendor/nlhjson/single_include/nlohmann)
 include_directories(vendor/Lua)
 
