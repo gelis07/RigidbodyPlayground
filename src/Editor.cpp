@@ -40,7 +40,7 @@ void Editor::Update()
     ImGui::End();
     Hierachy();
     SceneManagement();
-
+    DebugUI();
 
     ImGui::Begin("Inspector");
     if(SelectedEntity != -1)
@@ -70,7 +70,7 @@ void Editor::Update()
     {
         Entity& selectedEntity = scene.entities[SelectedEntity]; 
         ImGui::Begin("Add Component");
-        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator("Scripts/"))
+        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator(Stg::App::basePath + "Scripts/"))
         {
             if(ImGui::Button(dirEntry.path().string().c_str()))
             {
@@ -140,13 +140,23 @@ void Editor::Hierachy()
     ImGui::End();
 }
 
+
+void Editor::DebugUI()
+{
+    ImGui::Begin("Settings");
+    ImGui::Checkbox("Object Spawner", &Stg::Phs::EnableObjectSpawn);
+    ImGui::InputInt("Physics Engine Iterations", &Stg::Phs::PhysicsEngineIterations);
+    ImGui::InputInt("Gauss-Seidel Solver Iterations", &Stg::Phs::GaussSeidelIterations);
+    ImGui::End();
+}
+
 void Editor::SceneManagement()
 {
     ImGui::Begin("Scenes");
     ImGui::InputText("Save Scene Path", &SaveScenePath);
     if (ImGui::Button("save"))
     {
-        scene.Save(SaveScenePath);
+        scene.Save(Stg::App::basePath + "Scenes/" + SaveScenePath);
     }
     if(ImGui::Button("Load"))
     {
@@ -154,8 +164,8 @@ void Editor::SceneManagement()
     }
     if(LoadSceneWindow)
     {
-        ImGui::Begin("Add Component");
-        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator("Scenes/"))
+        ImGui::Begin("Load Scene");
+        for(const auto& dirEntry : std::filesystem::recursive_directory_iterator(Stg::App::basePath + "Scenes/"))
         {
             if(ImGui::Button(dirEntry.path().string().c_str()))
             {

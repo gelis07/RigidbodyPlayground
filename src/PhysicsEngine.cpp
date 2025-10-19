@@ -7,16 +7,6 @@ void PhysicsEngine::Init()
 }
 
 
-void PhysicsEngine::DebugUI()
-{
-    ImGui::Begin("Physics Settings");
-    ImGui::Checkbox("Enable Friction", &enableFriction);
-    ImGui::InputInt("Physics Engine Iterations", &PhysicsEngineIterations);
-    ImGui::InputInt("Gauss-Seidel Solver Iterations", &GaussSeidelIterations);
-    ImGui::End();
-}
-
-
 bool PhysicsEngine::IntersectingAABB(AABB a, AABB b)
 {
     if(a.max.x <= b.min.x || b.max.x <= a.min.x
@@ -130,7 +120,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
     }
     const size_t n = constants.size();
 
-    for (int iter = 0; iter < GaussSeidelIterations; iter++) {
+    for (int iter = 0; iter < Stg::Phs::GaussSeidelIterations; iter++) {
         for (int i = 0; i < n; i++) {
             double sum = 0.0;
             for (int j = 0; j < n; j++) {

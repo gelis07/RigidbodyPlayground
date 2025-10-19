@@ -206,8 +206,8 @@ CollisionData cRigidBody::CheckCollisionsSAT(cRigidBody* obj)
         obj->mTransform->position += -displacement;
     }
     else{
+        mTransform->position += displacement * 0.5f;
     }
-    mTransform->position += displacement * 0.5f;
     obj->mTransform->position += -displacement * 0.5f;
     for (glm::vec3& contactPoint : contactPoints) 
     {

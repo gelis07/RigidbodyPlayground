@@ -1,7 +1,7 @@
 #pragma once
 #include "Utilities.h"
 #include "cRigidbody.h"
-
+#include "Settings.h"
 
 
 struct ImpulseData
@@ -45,21 +45,19 @@ class PhysicsEngine
     public:
         void Init();
         void Update(const std::vector<cRigidBody*>& rigidbodies, float time);
-        void DebugUI();
         void CollisionResolution(const std::vector<cRigidBody*>& rigidbodies,size_t A, size_t B, const CollisionData& data, float dt);
         void SolveLinearSystem(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
         void SolveLinearSystemF(std::vector<float>* output, const std::vector<std::vector<float>>& matrix
         , const std::vector<float>& constants);
-        int PhysicsEngineIterations = 1;
-        int GaussSeidelIterations = 15;
+
+
+
         bool IntersectingAABB(AABB a, AABB b);
     private:
         std::vector<float> impulses = std::vector<float>(0);
-        // std::vector<float> frictionImpulses = std::vector<float>(0);
         std::vector<ImpulseData> mImpulses;
         std::vector<ImpulseData> mFrictionImpulses;
         std::vector<Collision> mCollisions;
         std::vector<CollisionObject> mColObjects;
-        bool enableFriction = true;
 };
