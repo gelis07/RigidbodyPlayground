@@ -33,6 +33,7 @@ void App::Init()
     ImFont* font = io.Fonts->AddFontFromFileTTF((Stg::App::basePath + "Lato-Regular.ttf").c_str(), 16.0f, NULL, io.Fonts->GetGlyphRangesDefault()); 
     io.FontDefault = font;
     io.IniFilename = (Stg::App::basePath + "/imgui.ini").c_str();
+    ImGui::LoadIniSettingsFromDisk((Stg::App::basePath + "/imgui.ini").c_str());
     ImGui_ImplGlfw_InitForOpenGL(mWindow,true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGuiStyle& style = ImGui::GetStyle();

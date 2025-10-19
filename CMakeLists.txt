@@ -48,4 +48,4 @@ vendor/ImGuiDocking/misc/cpp/imgui_stdlib.cpp
 )
 
 target_link_libraries(PhysicsEngine PRIVATE libglfw3.a)
-target_link_libraries(PhysicsEngine PRIVATE lua54.lib)
+target_link_libraries(PhysicsEngine PRIVATE liblua.a)
