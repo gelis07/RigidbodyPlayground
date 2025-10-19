@@ -32,20 +32,19 @@ void Engine::Run(Scene* scene,bool paused, float time)
     float currentTime = glfwGetTime();
     float deltaTime = currentTime - lastTime;
     lastTime = currentTime;
-    mPhysicsEngine.DebugUI();
     if(paused)
     {
         if(GetKeyDown(glfwGetCurrentContext(), GLFW_KEY_RIGHT))
         {
-            for (int iter = 0; iter < mPhysicsEngine.PhysicsEngineIterations; iter++) 
+            for (int iter = 0; iter < Stg::Phs::PhysicsEngineIterations; iter++) 
             {
-                mPhysicsEngine.Update(scene->rbs, deltaTime / mPhysicsEngine.PhysicsEngineIterations);
+                mPhysicsEngine.Update(scene->rbs, deltaTime / Stg::Phs::PhysicsEngineIterations);
             }
         }
     }else
     {
         Timings::StartTimer("Whole Engine");
-        if (mPhysicsEngine.ClickForObjects && GetClickDown(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT))
+        if (Stg::Phs::EnableObjectSpawn && GetClickDown(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_LEFT))
         {
             double xpos, ypos;
             glfwGetCursorPos(glfwGetCurrentContext(), &xpos, &ypos);
@@ -70,9 +69,9 @@ void Engine::Run(Scene* scene,bool paused, float time)
             }
         }
 
-        for (int iter = 0; iter < mPhysicsEngine.PhysicsEngineIterations; iter++) 
+        for (int iter = 0; iter < Stg::Phs::PhysicsEngineIterations; iter++) 
         {
-            mPhysicsEngine.Update(scene->rbs, deltaTime / mPhysicsEngine.PhysicsEngineIterations);
+            mPhysicsEngine.Update(scene->rbs, deltaTime / Stg::Phs::PhysicsEngineIterations);
         }
         Timings::EndTimer();
     }

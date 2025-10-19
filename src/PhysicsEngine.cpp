@@ -7,17 +7,6 @@ void PhysicsEngine::Init()
 }
 
 
-void PhysicsEngine::DebugUI()
-{
-    ImGui::Begin("Physics Settings");
-    ImGui::Checkbox("Enable AABB Check", &AABBCheck);
-    ImGui::Checkbox("Enable Object Spawner", &ClickForObjects);
-    ImGui::InputInt("Physics Engine Iterations", &PhysicsEngineIterations);
-    ImGui::InputInt("Gauss-Seidel Solver Iterations", &GaussSeidelIterations);
-    ImGui::End();
-}
-
-
 bool PhysicsEngine::IntersectingAABB(AABB a, AABB b)
 {
     if(a.max.x <= b.min.x || b.max.x <= a.min.x
@@ -46,13 +35,10 @@ void PhysicsEngine::Update(const std::vector<cRigidBody*>& rigidbodies, float dt
         //for example object A will check a collision with B but not B with A.
         for (int b = a+1; b < rigidbodies.size(); b++) 
         {
-            if(AABBCheck)
+            AABB BBox = rigidbodies[b]->GetAABB();
+            if(!IntersectingAABB(ABox, BBox))
             {
-                AABB BBox = rigidbodies[b]->GetAABB();
-                if(!IntersectingAABB(ABox, BBox))
-                {
-                    continue;
-                }
+                continue;
             }
             CollisionData data = rigidbodies[a]->CheckCollisionsSAT(rigidbodies[b]);
             if(data.collided)
@@ -134,7 +120,7 @@ void PhysicsEngine::SolveLinearSystem(std::vector<float>* output, const std::vec
     }
     const size_t n = constants.size();
 
-    for (int iter = 0; iter < GaussSeidelIterations; iter++) {
+    for (int iter = 0; iter < Stg::Phs::GaussSeidelIterations; iter++) {
         for (int i = 0; i < n; i++) {
             double sum = 0.0;
             for (int j = 0; j < n; j++) {

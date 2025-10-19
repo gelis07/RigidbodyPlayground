@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "Engine.h"
 #include "Timings.h"
-
+#include "Settings.h"
 
 
 
@@ -24,6 +24,7 @@ class Editor
         void Dockspace();
         void RescaleFramebuffer(float width, float height);
         void Hierachy();
+        void DebugUI();
 
         std::string SaveScenePath = "test.json";
         void SceneManagement();

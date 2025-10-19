@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "Utilities.h"
 #include "Camera.h"
+#include "Settings.h"
 
 class RenderEngine
 {

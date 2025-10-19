@@ -8,6 +8,9 @@ void App::GLFWErrorCallBack(int error, const char* description)
 
 void App::Init()
 {
+
+    Stg::App::basePath = "../Assets/";
+
     srand(time(0));
     Log(!glfwInit(), "Couldn't Initialize glfw");
     glfwSetErrorCallback(GLFWErrorCallBack);
@@ -27,8 +30,10 @@ void App::Init()
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("Assets/Lato-Regular.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesDefault()); 
+    ImFont* font = io.Fonts->AddFontFromFileTTF((Stg::App::basePath + "Lato-Regular.ttf").c_str(), 16.0f, NULL, io.Fonts->GetGlyphRangesDefault()); 
     io.FontDefault = font;
+    io.IniFilename = (Stg::App::basePath + "/imgui.ini").c_str();
+    ImGui::LoadIniSettingsFromDisk((Stg::App::basePath + "/imgui.ini").c_str());
     ImGui_ImplGlfw_InitForOpenGL(mWindow,true);
     ImGui_ImplOpenGL3_Init("#version 330");
     ImGuiStyle& style = ImGui::GetStyle();
