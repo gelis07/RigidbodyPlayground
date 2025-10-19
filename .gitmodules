@@ -11,3 +11,6 @@
 [submodule "vendor/nlhjson"]
 	path = vendor/nlhjson
 	url = https://github.com/nlohmann/json
+[submodule "vendor/fmt"]
+	path = vendor/fmt
+	url = https://github.com/fmtlib/fmt
